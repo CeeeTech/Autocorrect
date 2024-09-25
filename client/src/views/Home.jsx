@@ -6,32 +6,12 @@ export default function Home() {
             <Box sx={{
                 background:'#FAFAFA '
             }}>
-
-            
-            <Grid 
-                container 
-                justifyContent="center" 
-                alignItems="center"
-                sx={{
-                    height: 'auto',
-                    background: 'linear-gradient(90deg, #04D2BB 0%, #4F51EE 40%, #4F51EE 60%, #04D2BB 100%)',
-                }}
-            >
-                <Typography
-                    sx={{
-                        fontFamily: 'Poppins',
-                        fontWeight: 200, 
-                        fontSize: '56px',
-                        color: 'white',
-                    }}
-                >
-                    What would you like to correct?
-                </Typography>
-            </Grid>
             <Grid
                 container
                 justifyContent="center"
-                width={'60%'}
+                xs={12}
+                md={10}
+                lg={7}
                 sx={{
                     background:'#f4f4f6',
                     margin:'auto',
@@ -52,26 +32,34 @@ export default function Home() {
                 >
                     <Grid 
                         container 
+                        mt={2}
                         justifyContent="center"
                         alignItems="stretch" 
                         direction={'row'}
                     >
                         <Grid 
                             item 
-                            md={3} 
+                            lg={3}
+                            md={6}
+                            xs={12} 
                             sx={{
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                marginBottom: { xs: 2, sm: 3 },
                             }}
                         >
                             <Button 
+                                item
                                 fullWidth
                                 sx={{
-                                    margin: 2,
+                                    margin: 1,
+                                    fontSize:'18px',
                                     borderRadius: 8,
                                     color: 'white',
                                     height: '100%',
+                                    textTransform: 'none',
+                                    minHeight:'100px',
                                     background: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)',
                                 }}
                             >
@@ -80,20 +68,26 @@ export default function Home() {
                         </Grid>
                         <Grid 
                             item 
-                            md={3} 
+                            lg={3}
+                            md={6}
+                            xs={12} 
                             sx={{
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                marginBottom: { xs: 2, sm: 3 },
                             }}
                         >
                             <Button 
                                 fullWidth
                                 sx={{
-                                    margin: 2,
+                                    margin: 1,
+                                    fontSize:'18px',
                                     borderRadius: 8,
                                     color: 'white',
                                     height: '100%',
+                                    textTransform: 'none',
+                                    minHeight:'100px',
                                     background: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)',
                                 }}
                             >
@@ -102,21 +96,28 @@ export default function Home() {
                         </Grid>
                         <Grid 
                             item 
-                            md={3} 
+                            lg={3}
+                            md={6}
+                            xs={12}
                             sx={{
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                marginBottom: { xs: 2, sm: 3 },
                             }}
                         >
                             <Button 
                                 fullWidth
                                 sx={{
-                                    margin: 2,
+                                    marginTop:3,
+                                    fontSize:'18px',
+                                    margin: 1,
                                     borderRadius: 8,
                                     color: 'white',
                                     height: '100%',
-                                    background: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)',
+                                    textTransform: 'none',
+                                    minHeight:'100px',
+                                    background: 'linear-gradient(90deg, #fda301 20%, #fdd402 90%)',
                                 }}
                             >
                                 Narrative Writing
@@ -124,20 +125,26 @@ export default function Home() {
                         </Grid>
                         <Grid 
                             item 
-                            md={3} 
+                            lg={3}
+                            md={6}
+                            xs={12} 
                             sx={{
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                marginBottom: { xs: 2, sm: 3 },
                             }}
                         >
                             <Button 
                                 fullWidth
                                 sx={{
-                                    margin: 2,
+                                    margin: 1,
                                     borderRadius: 8,
                                     color: 'white',
+                                    fontSize:'18px',
                                     height: '100%',
+                                    textTransform: 'none',
+                                    minHeight:'100px',
                                     background: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)',
                                 }}
                             >
@@ -152,12 +159,14 @@ export default function Home() {
                                 sx={{
                                     padding:2,
                                     margin: 2,
+                                    fontSize:'18px',
                                     borderRadius: 10,
                                     color: 'white',
+                                    textTransform: 'none',
                                     background: 'linear-gradient(90deg, #4F51EE 10%, #4F51EE 10%, #04D2BB 90%)',
                                 }}
                             >
-                                Language Analysis
+                                Letter Writing
                         </Button>                
                     </Grid>
                     <Typography>
@@ -200,9 +209,11 @@ export default function Home() {
                                 paddingLeft:8,
                                 paddingRight:8,
                                 margin: 2,
+                                fontSize:'18px',
                                 borderRadius: 10,
                                 color: 'white',
-                                background: 'linear-gradient(90deg, #4F51EE 10%, #4F51EE 20%, #04D2BB 100%)',
+                                textTransform:'none',
+                                background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
                             }}
                         >
                             Submit For Correction
