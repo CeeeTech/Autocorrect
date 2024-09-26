@@ -18,12 +18,12 @@ export default function Home() {
                     padding:5
                 }}
             >
-                <Typography mt={5}>
+                <Typography mt={3}>
                     Select your writing type and let our Al help you make it flawless.
                 </Typography>
                 <Grid 
                     container
-                    mt={5}
+                    mt={3}
                     padding={2}
                     borderRadius={2}
                     sx={{
@@ -54,12 +54,11 @@ export default function Home() {
                                 fullWidth
                                 sx={{
                                     margin: 1,
-                                    fontSize:'18px',
+                                    fontSize:'15px',
                                     borderRadius: 8,
                                     color: 'white',
                                     height: '100%',
                                     textTransform: 'none',
-                                    minHeight:'100px',
                                     background: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)',
                                 }}
                             >
@@ -82,12 +81,11 @@ export default function Home() {
                                 fullWidth
                                 sx={{
                                     margin: 1,
-                                    fontSize:'18px',
+                                    fontSize:'15px',
                                     borderRadius: 8,
                                     color: 'white',
                                     height: '100%',
                                     textTransform: 'none',
-                                    minHeight:'100px',
                                     background: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)',
                                 }}
                             >
@@ -110,13 +108,12 @@ export default function Home() {
                                 fullWidth
                                 sx={{
                                     marginTop:3,
-                                    fontSize:'18px',
+                                    fontSize:'15px',
                                     margin: 1,
                                     borderRadius: 8,
                                     color: 'white',
                                     height: '100%',
                                     textTransform: 'none',
-                                    minHeight:'100px',
                                     background: 'linear-gradient(90deg, #fda301 20%, #fdd402 90%)',
                                 }}
                             >
@@ -141,10 +138,9 @@ export default function Home() {
                                     margin: 1,
                                     borderRadius: 8,
                                     color: 'white',
-                                    fontSize:'18px',
+                                    fontSize:'15px',
                                     height: '100%',
                                     textTransform: 'none',
-                                    minHeight:'100px',
                                     background: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)',
                                 }}
                             >
@@ -157,9 +153,9 @@ export default function Home() {
                         <Button 
                                 fullWidth
                                 sx={{
-                                    padding:2,
+                                    padding:1.5,
                                     margin: 2,
-                                    fontSize:'18px',
+                                    fontSize:'15px',
                                     borderRadius: 10,
                                     color: 'white',
                                     textTransform: 'none',
@@ -205,11 +201,11 @@ export default function Home() {
                     >
                         <Button
                             sx={{
-                                padding:2,
+                                padding:1.5,
+                                margin: 2,
+                                fontSize:'15px',
                                 paddingLeft:8,
                                 paddingRight:8,
-                                margin: 2,
-                                fontSize:'18px',
                                 borderRadius: 10,
                                 color: 'white',
                                 textTransform:'none',
