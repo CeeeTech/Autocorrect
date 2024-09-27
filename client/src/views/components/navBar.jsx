@@ -155,7 +155,7 @@ const NavBar = () => {
                 <Typography
                     sx={{
                         fontFamily: 'Lobster, cursive',
-                        fontSize: 100, // Default size for large screens
+                        fontSize: 80, //100
                         color: '#4F51EE',
                         fontWeight: 'normal',
                     }}
@@ -179,7 +179,7 @@ const NavBar = () => {
                     sx={{
                         fontFamily: 'Poppins',
                         fontWeight: 200,
-                        fontSize: '56px',
+                        fontSize: '40px', //56 px
                         color: 'white',
                     }}
                 >
