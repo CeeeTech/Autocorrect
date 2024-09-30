@@ -17,7 +17,7 @@ const documentRoutes = require('./documentRoutes');
 
 const router = express.Router();
 
-router.use('/auth', openaiRoutes);
+router.use('/openai', openaiRoutes);
 router.use('/billing-history', billingHistoryRoutes);
 router.use('/correction', correctionRoutes);
 router.use('/error-log', errorLogRoutes);

@@ -4,6 +4,8 @@ import { Button, Box, Grid, TextField, Typography } from '@mui/material';
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
     const [text, setText] = useState('Select your writing type and let our AI help you make it flawless.');
+    const [correctedText, setCorrectedText] = useState(''); // State to hold corrected text
+    const [story, setStory] = useState(''); // State to hold user input text
 
     const handleButtonClick = (label) => {
         setSelectedButton(label);
@@ -17,6 +19,27 @@ export default function Home() {
         { label: 'Language Analysis', gradient: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)' },
         { label: 'Letter Writing', gradient: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)' },
     ];
+
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/openai/correct-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: story }), // Send user input text
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setCorrectedText(data.correctedText); // Set the corrected text from response
+        } catch (error) {
+            console.error('Error fetching the corrected text:', error);
+        }
+    };
 
     return (
         <div>
@@ -39,7 +62,6 @@ export default function Home() {
                             boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
                         }}
                     >
-                        
                         <Grid 
                             container 
                             xs={12} 
@@ -68,7 +90,6 @@ export default function Home() {
                                     </Button>
                                 </Grid>
                             ))}
-                            
                         </Grid>
                         <Grid xs={12} mb={2} mt={-1}>
                             <Typography 
@@ -78,12 +99,10 @@ export default function Home() {
                                     fontFamily: 'monospace',
                                     color: '#4F51EE',
                                     fontWeight: 'bold',
-                                }}>
+                                }} >
                                 {text}
                             </Typography>
                         </Grid>
-
-                        
 
                         <Grid item xs={6}>
                             <Typography variant='h6' align={'center'}>
@@ -93,6 +112,8 @@ export default function Home() {
                                 multiline
                                 minRows={8}
                                 fullWidth
+                                value={story} // Controlled input
+                                onChange={(e) => setStory(e.target.value)} // Update state on change
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -124,6 +145,7 @@ export default function Home() {
                                 multiline
                                 minRows={8}
                                 fullWidth
+                                value={correctedText} // Controlled input
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -144,11 +166,15 @@ export default function Home() {
                                     },
                                     background: '#fee5ea',
                                 }}
+                                InputProps={{
+                                    readOnly: true, // Make the input read-only
+                                }}
                             />
                         </Grid>
 
                         <Grid container xs={6} mt={2} justifyContent={'center'} alignItems={'center'}>
                             <Button
+                                onClick={handleSubmit} // Call the submit function on click
                                 sx={{
                                     padding: 1.5,
                                     margin: 2,

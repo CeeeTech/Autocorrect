@@ -1,34 +1,38 @@
-const axios = require('axios');
+const { OpenAI } = require('openai');
+require('dotenv').config();
+
+// Initialize OpenAI API client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // Asynchronous function to handle the API request
-async function getCorrectedText(text) {
-  try {
-    const response = await axios.post('https://api.openai.com/v1/completions', {
-      prompt: text,
-      model: 'text-davinci-003',
-      max_tokens: 100
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-      }
-    });
-    return response.data.choices[0].text;
-  } catch (error) {
-    throw new Error('Error generating response');
-  }
-}
-
-// Controller function to handle autocorrect requests
-async function autocorrect(req, res) {
+async function correctText(req, res) {
   const { text } = req.body;
+
   try {
-    const correctedText = await getCorrectedText(text);
-    res.json({ correctedText });
+    // Call the OpenAI API asynchronously with an enhanced prompt
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: "You are a grammar correction tool." },
+        { role: "user", content: `Please correct the grammar and style of the following text, and for every correction, strike through the incorrect word and place the correct word next to it, and newly added words should be places inside (): "${text}"` }
+      ],
+      max_tokens: 500,
+      temperature: 0.7,
+    });
+
+    // Extract the corrected text from the response
+    const correctedText = response.choices[0].message.content.trim();
+
+    // Send the formatted corrected text back to the frontend
+    res.status(200).json({ correctedText });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error with OpenAI API:', error);
+    res.status(500).send('Error processing the text');
   }
-}
+};
 
 module.exports = {
-  autocorrect
+  correctText,
 };
