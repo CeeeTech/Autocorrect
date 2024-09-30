@@ -11,27 +11,30 @@ async function correctText(req, res) {
   const { text } = req.body;
 
   try {
-    // Call the OpenAI API asynchronously with an enhanced prompt
+    // Call the OpenAI API asynchronously with a specific formatting request
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [
-        { role: "system", content: "You are a grammar correction tool." },
-        { role: "user", content: `Please correct the grammar and style of the following text, and for every correction, strike through the incorrect word and place the correct word next to it, and newly added words should be places inside (): "${text}"` }
+        { role: "system", content: "You are a grammar correction tool that highlights grammatical and spelling errors by bolding the incorrect words and providing the corrected version in brackets next to them." },
+        { 
+          role: "user", 
+          content: `Make the following text grammatically and spelling-wise correct. Bold the incorrect words or phrases and provide the corrected version in brackets next to them: "${text}"` 
+        }
       ],
       max_tokens: 500,
       temperature: 0.7,
     });
 
-    // Extract the corrected text from the response
+    // Extract and return the corrected text directly
     const correctedText = response.choices[0].message.content.trim();
 
-    // Send the formatted corrected text back to the frontend
+    // Send the corrected and formatted text back to the frontend
     res.status(200).json({ correctedText });
   } catch (error) {
     console.error('Error with OpenAI API:', error);
     res.status(500).send('Error processing the text');
   }
-};
+}
 
 module.exports = {
   correctText,
