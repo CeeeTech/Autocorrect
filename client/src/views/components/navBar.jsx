@@ -42,7 +42,8 @@ const NavBar = () => {
                             sx={{
                                 borderRadius: 10,
                                 padding: '8px 20px',
-                                fontSize: '12px',
+                                fontFamily: 'Poppins, sans-serif',
+                                fontSize: '9px',
                                 color: 'white',
                                 background: isActive
                                     ? 'linear-gradient(151deg, #04D2BB 75%, #00F2F5 100%)'
@@ -155,7 +156,7 @@ const NavBar = () => {
                 <Typography
                     sx={{
                         fontFamily: 'Lobster, cursive',
-                        fontSize: 80, //100
+                        fontSize: 64, //100
                         color: '#4F51EE',
                         fontWeight: 'normal',
                     }}
@@ -178,8 +179,8 @@ const NavBar = () => {
                 <Typography
                     sx={{
                         fontFamily: 'Poppins',
-                        fontWeight: 200,
-                        fontSize: '40px', //56 px
+                        fontWeight: 100,
+                        fontSize: '32px', //56 px
                         color: 'white',
                     }}
                 >

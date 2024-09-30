@@ -15,7 +15,7 @@ export default function Home() {
         { label: 'Text Response Essays', gradient: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)' },
         { label: 'Narrative Writing', gradient: 'linear-gradient(90deg, #fda301 20%, #fdd402 90%)' },
         { label: 'Language Analysis', gradient: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)' },
-        { label: 'Letter Writing', gradient: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)' },
+        { label: 'Letter Writing', gradient: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)' },
     ];
 
     return (
@@ -25,7 +25,7 @@ export default function Home() {
                     container
                     justifyContent="center"
                     xs={12}
-                    sx={{ margin: 'auto', padding: 5 }}
+                    sx={{ margin: 'auto', padding: 4 }}
                 >
                     <Grid
                         container
@@ -36,10 +36,10 @@ export default function Home() {
                         justifyContent={'center'}
                         sx={{
                             background: 'white',
-                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)', 
+                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+                            fontFamily: 'Poppins, sans-serif', 
                         }}
                     >
-                        
                         <Grid 
                             container 
                             xs={12} 
@@ -54,28 +54,30 @@ export default function Home() {
                                         fullWidth
                                         onClick={() => handleButtonClick(item.label)}
                                         sx={{
-                                            fontSize: '15px',
+                                            fontSize: '12px',
                                             borderRadius: 2,
                                             color: 'white',
                                             border: selectedButton === item.label
-                                                ? '3px solid #d23e69' // Thicker border when selected
-                                                : '1px solid gray', // Default border
+                                                ? '2px solid #d23e69'
+                                                : '0px solid white',
                                             textTransform: 'none',
                                             background: item.gradient,
+                                            maxHeight: '50px',
+                                            fontFamily: 'Poppins, sans-serif'
                                         }}
                                     >
                                         {item.label}
                                     </Button>
                                 </Grid>
                             ))}
-                            
                         </Grid>
+
                         <Grid xs={12} mb={2} mt={-1}>
-                            <Typography 
-                                variant='h6' 
+                            <Typography  
                                 align={'center'}
                                 sx={{
-                                    fontFamily: 'monospace',
+                                    fontSize:'16px',
+                                    fontFamily: 'Poppins, sans-serif',
                                     color: '#4F51EE',
                                     fontWeight: 'bold',
                                 }}>
@@ -83,66 +85,82 @@ export default function Home() {
                             </Typography>
                         </Grid>
 
-                        
-
                         <Grid item xs={6}>
-                            <Typography variant='h6' align={'center'}>
+                            <Typography 
+                                align={'center'} 
+                                mb={1}
+                                sx={{ 
+                                    fontFamily: 'Poppins, sans-serif',
+                                    fontSize:'16px',
+                                    fontWeight:'bold'
+                                }}
+                            >
                                 Your Story
                             </Typography>
                             <TextField
                                 multiline
-                                minRows={8}
+                                minRows={6}
                                 fullWidth
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
                                             borderColor: '#1cd1fb',
-                                            borderWidth: '3px',
+                                            borderWidth: '2px',
                                             borderRadius: 3,
                                         },
                                         '&:hover fieldset': {
                                             borderColor: '#1cd1fb',
-                                            borderWidth: '3px',
+                                            borderWidth: '2px',
                                             borderRadius: 3,
                                         },
                                         '&.Mui-focused fieldset': {
                                             borderColor: '#1cd1fb',
-                                            borderWidth: '3px',
+                                            borderWidth: '2px',
                                             borderRadius: 3,
                                         },
                                     },
                                     background: '#f4f4f6',
+                                    fontFamily: 'Poppins, sans-serif',
                                 }}
                             />
                         </Grid>
 
                         <Grid item xs={6}>
-                            <Typography variant='h6' align={'center'}>
+                            <Typography 
+                                mb={1}
+                                align={'center'} 
+                                sx={{ 
+                                    fontFamily: 'Poppins, sans-serif',
+                                    fontSize:'16px',
+                                    fontWeight:'bold'
+                                }}
+                                >
                                 AI-Generated Corrections
                             </Typography>
                             <TextField
                                 multiline
-                                minRows={8}
+                                minRows={6}
                                 fullWidth
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
                                             borderColor: '#d23e69',
-                                            borderWidth: '3px',
+                                            borderWidth: '2px',
                                             borderRadius: 3,
                                         },
                                         '&:hover fieldset': {
                                             borderColor: '#d23e69',
-                                            borderWidth: '3px',
+                                            borderWidth: '2px',
                                             borderRadius: 3,
                                         },
                                         '&.Mui-focused fieldset': {
                                             borderColor: '#d23e69',
-                                            borderWidth: '3px',
+                                            borderWidth: '2px',
                                             borderRadius: 3,
                                         },
                                     },
                                     background: '#fee5ea',
+                                    fontFamily: 'Poppins, sans-serif',
                                 }}
                             />
                         </Grid>
@@ -150,23 +168,30 @@ export default function Home() {
                         <Grid container xs={6} mt={2} justifyContent={'center'} alignItems={'center'}>
                             <Button
                                 sx={{
-                                    padding: 1.5,
-                                    margin: 2,
-                                    fontSize: '15px',
+                                    padding: 1,
+                                    fontSize: '12px',
                                     paddingLeft: 8,
                                     paddingRight: 8,
                                     borderRadius: 10,
                                     color: 'white',
                                     textTransform: 'none',
                                     background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
+                                    fontFamily: 'Poppins, sans-serif' 
                                 }}
                             >
                                 Submit For Correction
                             </Button>
                         </Grid>
 
-                        <Grid container xs={6} mt={-3} pr={1} justifyContent={'right'} alignItems={'center'}>
-                            <Button>Copy Text</Button>
+                        <Grid container xs={6} mt={-2} pr={1} justifyContent={'right'} alignItems={'center'}>
+                            <Button 
+                                sx={{ 
+                                    fontFamily: 'Poppins, sans-serif',
+                                    fontSize:'12px' 
+                                }}
+                            >
+                                Copy Text
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>
