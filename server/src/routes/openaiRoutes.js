@@ -4,6 +4,6 @@ const openaiController = require('../controllers/openaiController');
 const router = express.Router();
 
 // Route to handle autocorrect requests
-router.post('/api/autocorrect', openaiController.autocorrect);
+router.post('/correct-text', openaiController.correctText);
 
 module.exports = router;

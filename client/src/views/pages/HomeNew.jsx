@@ -4,6 +4,8 @@ import { Button, Box, Grid, TextField, Typography } from '@mui/material';
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
     const [text, setText] = useState('Select your writing type and let our AI help you make it flawless.');
+    const [correctedText, setCorrectedText] = useState(''); // State to hold corrected text
+    const [story, setStory] = useState(''); // State to hold user input text
 
     const handleButtonClick = (label) => {
         setSelectedButton(label);
@@ -17,6 +19,27 @@ export default function Home() {
         { label: 'Language Analysis', gradient: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)' },
         { label: 'Letter Writing', gradient: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)' },
     ];
+
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/openai/correct-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: story }), // Send user input text
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            setCorrectedText(data.correctedText); // Set the corrected text from response
+        } catch (error) {
+            console.error('Error fetching the corrected text:', error);
+        }
+    };
 
     return (
         <div>
@@ -80,7 +103,7 @@ export default function Home() {
                                     fontFamily: 'Poppins, sans-serif',
                                     color: '#4F51EE',
                                     fontWeight: 'bold',
-                                }}>
+                                }} >
                                 {text}
                             </Typography>
                         </Grid>
@@ -101,6 +124,8 @@ export default function Home() {
                                 multiline
                                 minRows={6}
                                 fullWidth
+                                value={story} // Controlled input
+                                onChange={(e) => setStory(e.target.value)} // Update state on change
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -141,6 +166,7 @@ export default function Home() {
                                 multiline
                                 minRows={6}
                                 fullWidth
+                                value={correctedText} // Controlled input
                                 sx={{
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': {
@@ -162,11 +188,15 @@ export default function Home() {
                                     background: '#fee5ea',
                                     fontFamily: 'Poppins, sans-serif',
                                 }}
+                                InputProps={{
+                                    readOnly: true, // Make the input read-only
+                                }}
                             />
                         </Grid>
 
                         <Grid container xs={6} mt={2} justifyContent={'center'} alignItems={'center'}>
                             <Button
+                                onClick={handleSubmit} // Call the submit function on click
                                 sx={{
                                     padding: 1,
                                     fontSize: '12px',

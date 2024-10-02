@@ -1,34 +1,41 @@
-const axios = require('axios');
+const { OpenAI } = require('openai');
+require('dotenv').config();
+
+// Initialize OpenAI API client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 // Asynchronous function to handle the API request
-async function getCorrectedText(text) {
-  try {
-    const response = await axios.post('https://api.openai.com/v1/completions', {
-      prompt: text,
-      model: 'text-davinci-003',
-      max_tokens: 100
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-      }
-    });
-    return response.data.choices[0].text;
-  } catch (error) {
-    throw new Error('Error generating response');
-  }
-}
-
-// Controller function to handle autocorrect requests
-async function autocorrect(req, res) {
+async function correctText(req, res) {
   const { text } = req.body;
+
   try {
-    const correctedText = await getCorrectedText(text);
-    res.json({ correctedText });
+    // Call the OpenAI API asynchronously with a specific formatting request
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You are a grammar correction tool that highlights grammatical and spelling errors by bolding the incorrect words and providing the corrected version in brackets next to them." },
+        { 
+          role: "user", 
+          content: `Make the following text grammatically and spelling-wise correct. Bold the incorrect words or phrases and provide the corrected version in brackets next to them: "${text}"` 
+        }
+      ],
+      max_tokens: 500,
+      temperature: 0.7,
+    });
+
+    // Extract and return the corrected text directly
+    const correctedText = response.choices[0].message.content.trim();
+
+    // Send the corrected and formatted text back to the frontend
+    res.status(200).json({ correctedText });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error with OpenAI API:', error);
+    res.status(500).send('Error processing the text');
   }
 }
 
 module.exports = {
-  autocorrect
+  correctText,
 };
