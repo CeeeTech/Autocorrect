@@ -21,7 +21,7 @@ async function correctText(req, res) {
         },
         { 
           role: "user", 
-          content: `Make the following text grammatically and spelling-wise correct. Bold the incorrect words or phrases and provide the corrected version in brackets next to them: ex: provided text - my name lakshani, output - **my** (My) name (is) **lakshani** (Lakshani) ${text}` 
+          content: `Make the following text grammatically and spelling-wise correct. Bold the incorrect words or phrases and provide the corrected version in brackets next to them: ex: provided text - my name lakshani, output - **my** (My) name (is) **lakshani** (Lakshani). Do not add any explanations or extra text ${text}` 
         }
       ],
       max_tokens: 500,
