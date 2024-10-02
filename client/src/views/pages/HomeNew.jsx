@@ -34,22 +34,25 @@ export default function Home() {
                 throw new Error('Network response was not ok');
             }
 
-            const data = await response.json();
-            setCorrectedText(data.correctedText); // Set the corrected text from response
+            const correctedText = await response.text(); // Extract the corrected text
+            setCorrectedText(parseCorrectedText(correctedText)); // Update the state with parsed HTML
         } catch (error) {
             console.error('Error fetching the corrected text:', error);
         }
     };
 
+    const parseCorrectedText = (text) => {
+        // Replace **text** with <span style="color: red; text-decoration: line-through;">text</span> for red strikethrough
+        // Replace (text) with <span style="color: blue;">text</span> for blue text
+        return text
+            .replace(/\*\*(.*?)\*\*/g, '<span style="color: red; text-decoration: line-through;">$1</span>') // Red strikethrough text
+            .replace(/\((.*?)\)/g, '<span style="color: blue;">$1</span>');    // Blue text for parentheses
+    };    
+
     return (
         <div>
             <Box sx={{ background: '#FAFAFA ' }}>
-                <Grid
-                    container
-                    justifyContent="center"
-                    xs={12}
-                    sx={{ margin: 'auto', padding: 4 }}
-                >
+                <Grid container justifyContent="center" xs={12} sx={{ margin: 'auto', padding: 4 }}>
                     <Grid
                         container
                         xs={12}
@@ -60,17 +63,10 @@ export default function Home() {
                         sx={{
                             background: 'white',
                             boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-                            fontFamily: 'Poppins, sans-serif', 
+                            fontFamily: 'Poppins, sans-serif',
                         }}
                     >
-                        <Grid 
-                            container 
-                            xs={12} 
-                            p={2} 
-                            spacing={1} 
-                            justifyContent="center" 
-                            direction={'row'}
-                        >
+                        <Grid container xs={12} p={2} spacing={1} justifyContent="center" direction={'row'}>
                             {buttonList.map((item, index) => (
                                 <Grid item xs={2} mb={1} key={index}>
                                     <Button
@@ -96,26 +92,27 @@ export default function Home() {
                         </Grid>
 
                         <Grid xs={12} mb={2} mt={-1}>
-                            <Typography  
+                            <Typography
                                 align={'center'}
                                 sx={{
-                                    fontSize:'16px',
+                                    fontSize: '16px',
                                     fontFamily: 'Poppins, sans-serif',
                                     color: '#4F51EE',
                                     fontWeight: 'bold',
-                                }} >
+                                }}
+                            >
                                 {text}
                             </Typography>
                         </Grid>
 
                         <Grid item xs={6}>
-                            <Typography 
-                                align={'center'} 
+                            <Typography
+                                align={'center'}
                                 mb={1}
-                                sx={{ 
+                                sx={{
                                     fontFamily: 'Poppins, sans-serif',
-                                    fontSize:'16px',
-                                    fontWeight:'bold'
+                                    fontSize: '16px',
+                                    fontWeight: 'bold'
                                 }}
                             >
                                 Your Story
@@ -151,46 +148,27 @@ export default function Home() {
                         </Grid>
 
                         <Grid item xs={6}>
-                            <Typography 
+                            <Typography
                                 mb={1}
-                                align={'center'} 
-                                sx={{ 
+                                align={'center'}
+                                sx={{
                                     fontFamily: 'Poppins, sans-serif',
-                                    fontSize:'16px',
-                                    fontWeight:'bold'
+                                    fontSize: '16px',
+                                    fontWeight: 'bold'
                                 }}
-                                >
+                            >
                                 AI-Generated Corrections
                             </Typography>
-                            <TextField
-                                multiline
-                                minRows={6}
-                                fullWidth
-                                value={correctedText} // Controlled input
+                            <Box
                                 sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: '#d23e69',
-                                            borderWidth: '2px',
-                                            borderRadius: 3,
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: '#d23e69',
-                                            borderWidth: '2px',
-                                            borderRadius: 3,
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: '#d23e69',
-                                            borderWidth: '2px',
-                                            borderRadius: 3,
-                                        },
-                                    },
                                     background: '#fee5ea',
                                     fontFamily: 'Poppins, sans-serif',
+                                    padding: 2,
+                                    minHeight: '150px',
+                                    border: '2px solid #d23e69',
+                                    borderRadius: '5px',
                                 }}
-                                InputProps={{
-                                    readOnly: true, // Make the input read-only
-                                }}
+                                dangerouslySetInnerHTML={{ __html: correctedText }} // Render the formatted HTML
                             />
                         </Grid>
 
@@ -206,7 +184,7 @@ export default function Home() {
                                     color: 'white',
                                     textTransform: 'none',
                                     background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
-                                    fontFamily: 'Poppins, sans-serif' 
+                                    fontFamily: 'Poppins, sans-serif'
                                 }}
                             >
                                 Submit For Correction
@@ -214,10 +192,10 @@ export default function Home() {
                         </Grid>
 
                         <Grid container xs={6} mt={-2} pr={1} justifyContent={'right'} alignItems={'center'}>
-                            <Button 
-                                sx={{ 
+                            <Button
+                                sx={{
                                     fontFamily: 'Poppins, sans-serif',
-                                    fontSize:'12px' 
+                                    fontSize: '12px'
                                 }}
                             >
                                 Copy Text
