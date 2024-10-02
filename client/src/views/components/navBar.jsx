@@ -41,9 +41,9 @@ const NavBar = () => {
                         <Button
                             sx={{
                                 borderRadius: 10,
-                                padding: '8px 20px',
+                                padding: '2px 20px',
                                 fontFamily: 'Poppins, sans-serif',
-                                fontSize: '9px',
+                                fontSize: '12px',
                                 color: 'white',
                                 background: isActive
                                     ? 'linear-gradient(151deg, #04D2BB 75%, #00F2F5 100%)'
@@ -111,7 +111,7 @@ const NavBar = () => {
                                             sx={{
                                                 width: '100%',
                                                 borderRadius: 10,
-                                                padding: '8px 20px',
+                                                padding: '3px 20px',
                                                 fontSize: '12px',
                                                 color: 'white',
                                                 background: isActive

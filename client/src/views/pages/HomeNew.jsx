@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Box, Grid, TextField, Typography } from '@mui/material';
+import { Button, Box, TextField, Typography } from '@mui/material';
 
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
@@ -41,78 +41,106 @@ export default function Home() {
         }
     };
 
+    const handleCopyText = () => {
+        alert('Text copied to clipboard');
+    };
+
+    const handleSaveAsPDF = () => {
+        alert('Saving as PDF');
+    };
+    
     const parseCorrectedText = (text) => {
         // Replace **text** with <span style="color: red; text-decoration: line-through;">text</span> for red strikethrough
         // Replace (text) with <span style="color: blue;">text</span> for blue text
         return text
             .replace(/\*\*(.*?)\*\*/g, '<span style="color: red; text-decoration: line-through;">$1</span>') // Red strikethrough text
             .replace(/\((.*?)\)/g, '<span style="color: blue;">$1</span>');    // Blue text for parentheses
-    };    
+    };
 
     return (
-        <div>
-            <Box sx={{ background: '#FAFAFA ' }}>
-                <Grid container justifyContent="center" xs={12} sx={{ margin: 'auto', padding: 4 }}>
-                    <Grid
-                        container
-                        xs={12}
-                        padding={2}
-                        spacing={2}
-                        borderRadius={2}
-                        justifyContent={'center'}
-                        sx={{
-                            background: 'white',
-                            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-                            fontFamily: 'Poppins, sans-serif',
-                        }}
-                    >
-                        <Grid container xs={12} p={2} spacing={1} justifyContent="center" direction={'row'}>
-                            {buttonList.map((item, index) => (
-                                <Grid item xs={2} mb={1} key={index}>
-                                    <Button
-                                        fullWidth
-                                        onClick={() => handleButtonClick(item.label)}
-                                        sx={{
-                                            fontSize: '12px',
-                                            borderRadius: 2,
-                                            color: 'white',
-                                            border: selectedButton === item.label
-                                                ? '2px solid #d23e69'
-                                                : '0px solid white',
-                                            textTransform: 'none',
-                                            background: item.gradient,
-                                            maxHeight: '50px',
-                                            fontFamily: 'Poppins, sans-serif'
-                                        }}
-                                    >
-                                        {item.label}
-                                    </Button>
-                                </Grid>
-                            ))}
-                        </Grid>
+        <Box sx={{ background: '#FAFAFA', padding: { xs: 2, md: 2 } }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: 2,
+                    background: 'white',
+                    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+                    borderRadius: 2,
+                    maxWidth: { xs: '100%', md: '100%' },
+                    margin: 'auto',
+                    fontFamily: 'Poppins, sans-serif',
+                }}
+            >
+                {/* Buttons */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        flexWrap: 'wrap',
+                        gap: 1,
+                        width: '100%',
+                        mb: 2,
+                    }}
+                >
+                    {buttonList.map((item, index) => (
+                        <Button
+                            key={index}
+                            fullWidth
+                            onClick={() => handleButtonClick(item.label)}
+                            sx={{
+                                flexBasis: { xs: '100%', sm: '45%', md: '18%' },
+                                fontSize: '12px',
+                                borderRadius: 2,
+                                color: 'white',
+                                border: selectedButton === item.label
+                                    ? '2px solid #d23e69'
+                                    : '0px solid white',
+                                textTransform: 'none',
+                                background: item.gradient,
+                                maxHeight: '50px',
+                                fontFamily: 'Poppins, sans-serif',
+                            }}
+                        >
+                            {item.label}
+                        </Button>
+                    ))}
+                </Box>
 
-                        <Grid xs={12} mb={2} mt={-1}>
-                            <Typography
-                                align={'center'}
-                                sx={{
-                                    fontSize: '16px',
-                                    fontFamily: 'Poppins, sans-serif',
-                                    color: '#4F51EE',
-                                    fontWeight: 'bold',
-                                }}
-                            >
-                                {text}
-                            </Typography>
-                        </Grid>
+                {/* Instruction Text */}
+                <Typography
+                    align={'center'}
+                    sx={{
+                        fontSize: '16px',
+                        fontFamily: 'Poppins, sans-serif',
+                        color: '#4F51EE',
+                        fontWeight: 'bold',
+                        m: 2,
+                    }}
+                >
+                    {text}
+                </Typography>
 
-                        <Grid item xs={6}>
+                {/* Text areas for story and corrections */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        width: '100%',
+                        gap: 2,
+                    }}
+                >
+                    {/* User Story Input */}
+                    <Box sx={{ flex: 1 }}>
+                        <Box>
                             <Typography
                                 align={'center'}
                                 mb={1}
                                 sx={{
                                     fontFamily: 'Poppins, sans-serif',
                                     fontSize: '16px',
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
                                 }}
                             >
                                 Your Story
@@ -145,16 +173,45 @@ export default function Home() {
                                     fontFamily: 'Poppins, sans-serif',
                                 }}
                             />
-                        </Grid>
+                        </Box>
 
-                        <Grid item xs={6}>
+                        {/* button for submit for correction */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                mt: 2,
+                            }}
+                        >
+                            <Button
+                                onClick={handleSubmit} // Call the submit function on click
+                                sx={{
+                                    padding: 1,
+                                    fontSize: '12px',
+                                    paddingLeft: 8,
+                                    paddingRight: 8,
+                                    borderRadius: 10,
+                                    color: 'white',
+                                    textTransform: 'none',
+                                    background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
+                                    fontFamily: 'Poppins, sans-serif',
+                                }}
+                            >
+                                Submit For Correction
+                            </Button>
+                        </Box>
+                    </Box>
+
+                    {/* AI-Generated Corrections */}
+                    <Box sx={{ flex: 1 }}>
+                        <Box>
                             <Typography
                                 mb={1}
                                 align={'center'}
                                 sx={{
                                     fontFamily: 'Poppins, sans-serif',
                                     fontSize: '16px',
-                                    fontWeight: 'bold'
+                                    fontWeight: 'bold',
                                 }}
                             >
                                 AI-Generated Corrections
@@ -170,40 +227,42 @@ export default function Home() {
                                 }}
                                 dangerouslySetInnerHTML={{ __html: correctedText }} // Render the formatted HTML
                             />
-                        </Grid>
-
-                        <Grid container xs={6} mt={2} justifyContent={'center'} alignItems={'center'}>
+                        </Box>
+                        {/* button for copy text */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                mt: 2,
+                            }}
+                        >
+                            {/* button to save as pdf */}
                             <Button
-                                onClick={handleSubmit} // Call the submit function on click
+                                onClick={handleSaveAsPDF} // Call the save function on click
                                 sx={{
-                                    padding: 1,
-                                    fontSize: '12px',
-                                    paddingLeft: 8,
-                                    paddingRight: 8,
-                                    borderRadius: 10,
                                     color: 'white',
                                     textTransform: 'none',
                                     background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
-                                    fontFamily: 'Poppins, sans-serif'
+                                    fontFamily: 'Poppins, sans-serif',
+                                    mr: 1,
                                 }}
                             >
-                                Submit For Correction
+                                Save as PDF
                             </Button>
-                        </Grid>
-
-                        <Grid container xs={6} mt={-2} pr={1} justifyContent={'right'} alignItems={'center'}>
                             <Button
+                                onClick={handleCopyText} // Call the copy function on click
                                 sx={{
                                     fontFamily: 'Poppins, sans-serif',
-                                    fontSize: '12px'
+                                    fontSize: '12px',
+                                    backgroundColor: '#f4f4f6',
                                 }}
                             >
                                 Copy Text
                             </Button>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                        </Box>
+                    </Box>
+                </Box>
             </Box>
-        </div>
+        </Box>
     );
 }
