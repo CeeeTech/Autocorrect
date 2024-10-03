@@ -51,11 +51,12 @@ export default function Home() {
     
     const parseCorrectedText = (text) => {
         // Replace **text** with <span style="color: red; text-decoration: line-through;">text</span> for red strikethrough
-        // Replace (text) with <span style="color: blue;">text</span> for blue text
+        // Replace ((text)) with <span style="color: blue;">text</span> for blue text and remove the parentheses
         return text
             .replace(/\*\*(.*?)\*\*/g, '<span style="color: red; text-decoration: line-through;">$1</span>') // Red strikethrough text
-            .replace(/\((.*?)\)/g, '<span style="color: blue;">$1</span>');    // Blue text for parentheses
-    };
+            .replace(/\(\((.*?)\)\)/g, '<span style="color: blue;">$1</span>') // Blue text without parentheses
+            .replace(/##(.*?)##/g, '<span style="color: purple;">$1</span>'); // Purple text without ##
+    };    
 
     return (
         <Box sx={{ background: '#FAFAFA', padding: { xs: 2, md: 2 } }}>

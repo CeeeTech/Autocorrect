@@ -19,9 +19,9 @@ async function correctText(req, res) {
           role: "system", 
           content: "You are a grammar correction tool that highlights grammatical and spelling errors by bolding the incorrect words and providing the corrected version in brackets next to them." 
         },
-        { 
-          role: "user", 
-          content: `Make the following text grammatically and spelling-wise correct. Bold the incorrect words or phrases and provide the corrected version in brackets next to them: ex: provided text - my name lakshani, output - **my** (My) name (is) **lakshani** (Lakshani). Do not add any explanations or extra text ${text}` 
+        {
+          role: "user",
+          content: `Make the following text grammatically, spelling-wise, and punctuation-wise correct. Bold the given incorrect words, phrases, or punctuation, and provide the corrected version in double brackets ((example)) next to them. If any word or punctuation is missing in the given text, wrap it inside ##: ex: provided text - "my name lakshani", output - "**my** ((My)) name ##is## **lakshani** ((Lakshani)) ##.##" Do not add any explanations or extra text ${text}` 
         }
       ],
       max_tokens: 500,
