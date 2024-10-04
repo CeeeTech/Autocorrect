@@ -26,25 +26,78 @@ async function correctText(req, res) {
     });
     const { data: saplingData } = saplingResponse;
 
-    // Step 2: Process Sapling AI's edits to create bolded and corrected version
-    let modifiedText = text;
-    saplingData.edits.forEach((edit) => {
-      const { start, end, replacement } = edit;
-      const incorrect = modifiedText.slice(start, end);
-      modifiedText =
-        modifiedText.slice(0, start) +
-        `**${incorrect}** ((${replacement}))` +
-        modifiedText.slice(end);
+    // Step 2: split the original text into an array of sentences according to the sapling edits.sentence_start of each edit element.
+    const sentences = [];
+    let start = 0;
+    saplingData.edits.forEach((edit, index) => {
+    const { sentence_start } = edit;
+    
+    // Ignore the first slice if sentence_start is 0
+    if (index > 0) {
+        sentences.push(text.slice(start, sentence_start));
+    }
+
+    start = sentence_start;
     });
 
-    // Step 3: Process Sapling AI's edits to create just the corrected version without any stylings
-    let correctedText = text;
+    // Add the last slice of the remaining text
+    sentences.push(text.slice(start));
+
+    console.log(sentences);
+    
+
+    // Step 2: Process Sapling AI's edits to create bolded and corrected version
+    let modifiedText = text;
+    let offset = 0; // Track how much the text has shifted after each replacement
+
     saplingData.edits.forEach((edit) => {
-      const { start, end, replacement } = edit;
-      correctedText =
-        correctedText.slice(0, start) +
-        replacement +
-        correctedText.slice(end);
+        const { sentence_start, start, end, replacement } = edit;
+
+        // Adjust start and end by the current offset
+        const adjustedStart = sentence_start + start + offset;
+        const adjustedEnd = sentence_start + end + offset;
+
+        // Get the incorrect text using the adjusted indices
+        const incorrectText = modifiedText.slice(adjustedStart, adjustedEnd);
+        console.log("incorrectText ", incorrectText);
+
+        // Create the replacement with bold and double brackets
+        const correctedText = `**${incorrectText}** ((${replacement}))`;
+
+        // Replace the incorrect text with the corrected text in the modified text
+        modifiedText = modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
+
+        // Update the offset: difference in length between correctedText and incorrectText
+        offset += correctedText.length - incorrectText.length;
+
+        console.log(modifiedText);
+    });
+
+    // Step 3: Process Sapling AI's edits to create just the corrected version without any stylings. use the same way as above
+    let correctedText = text;
+    let offset1 = 0; // Track how much the text has shifted after each replacement
+    
+    saplingData.edits.forEach((edit) => {
+        const { sentence_start, start, end, replacement } = edit;
+
+        // Adjust start and end by the current offset
+        const adjustedStart = sentence_start + start + offset1;
+        const adjustedEnd = sentence_start + end + offset1;
+
+        // Get the incorrect text using the adjusted indices
+        const incorrectText = correctedText.slice(adjustedStart, adjustedEnd);
+        console.log("incorrectText ", incorrectText);
+
+        // Create the replacement with bold and double brackets
+        const correctedText1 = `${replacement}`;
+
+        // Replace the incorrect text with the corrected text in the modified text
+        correctedText = correctedText.slice(0, adjustedStart) + correctedText1 + correctedText.slice(adjustedEnd);
+
+        // Update the offset: difference in length between correctedText and incorrectText
+        offset1 += correctedText1.length - incorrectText.length;
+
+        console.log(correctedText);
     });
 
     // Step 4: Request ChatGPT to format the response

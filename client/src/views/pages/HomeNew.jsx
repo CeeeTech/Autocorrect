@@ -22,7 +22,7 @@ export default function Home() {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/saplingai/correct-text', {
+            const response = await fetch('http://localhost:5000/api/ai/correct-text', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
