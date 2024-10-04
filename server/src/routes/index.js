@@ -14,6 +14,7 @@ const subscriptionRoutes = require('./subscriptionRoutes');
 const subscriptionDetailRoutes = require('./subscriptionDetailRoutes');
 const writingTypeRoutes = require('./writingTypeRoutes');
 const documentRoutes = require('./documentRoutes');
+const saplingaiRoutes = require('./saplingaiRoutes');
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use('/subscription', subscriptionRoutes);
 router.use('/subscription-detail', subscriptionDetailRoutes);
 router.use('/writing-type', writingTypeRoutes);
 router.use('/document', documentRoutes);
+router.use('/saplingai', saplingaiRoutes);
 
 module.exports = router;
