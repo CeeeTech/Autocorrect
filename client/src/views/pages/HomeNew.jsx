@@ -4,7 +4,7 @@ import { Button, Box, TextField, Typography } from '@mui/material';
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
     const [text, setText] = useState('Select your writing type and let our AI help you make it flawless.');
-    const [correctedText, setCorrectedText] = useState(''); // State to hold corrected text
+    const [modifiedText, setModifiedText] = useState(''); // State to hold corrected text
     const [story, setStory] = useState(''); // State to hold user input text
 
     const handleButtonClick = (label) => {
@@ -22,7 +22,7 @@ export default function Home() {
 
     const handleSubmit = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/openai/correct-text', {
+            const response = await fetch('http://localhost:5000/api/saplingai/correct-text', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -34,8 +34,10 @@ export default function Home() {
                 throw new Error('Network response was not ok');
             }
 
-            const correctedText = await response.text(); // Extract the corrected text
-            setCorrectedText(parseCorrectedText(correctedText)); // Update the state with parsed HTML
+            const data = await response.json();
+            console.log(data);
+            setModifiedText(parseModifiedText(data.modifiedText)); // Update the corrected text state
+
         } catch (error) {
             console.error('Error fetching the corrected text:', error);
         }
@@ -49,7 +51,7 @@ export default function Home() {
         alert('Saving as PDF');
     };
     
-    const parseCorrectedText = (text) => {
+    const parseModifiedText = (text) => {
         // Replace **text** with <span style="color: red; text-decoration: line-through;">text</span> for red strikethrough
         // Replace ((text)) with <span style="color: blue;">text</span> for blue text and remove the parentheses
         return text
@@ -226,7 +228,7 @@ export default function Home() {
                                     border: '2px solid #d23e69',
                                     borderRadius: '5px',
                                 }}
-                                dangerouslySetInnerHTML={{ __html: correctedText }} // Render the formatted HTML
+                                dangerouslySetInnerHTML={{ __html: modifiedText }} // Render the formatted HTML
                             />
                         </Box>
                         {/* button for copy text */}

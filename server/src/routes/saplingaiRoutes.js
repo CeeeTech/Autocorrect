@@ -4,6 +4,6 @@ const saplingaiController = require('../controllers/saplingaiController');
 const router = express.Router();
 
 // Route to handle autocorrect requests
-router.post('/sapling-correct-text', saplingaiController.sapling_correctText);
+router.post('/correct-text', saplingaiController.correctText);
 
 module.exports = router;

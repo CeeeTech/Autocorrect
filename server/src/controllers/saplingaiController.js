@@ -6,7 +6,7 @@ const apiKey = process.env.SAPLING_API_KEY;
 const saplingUrl = 'https://api.sapling.ai/api/v1/edits';
 const session_id = process.env.COOKIE_KEY;
 
-async function sapling_correctText(req, res) {
+async function correctText(req, res) {
   const { text } = req.body;
   try {
       const response = await axios.post(
@@ -28,5 +28,5 @@ async function sapling_correctText(req, res) {
 }
 
 module.exports = {
-  sapling_correctText
+  correctText
 };
