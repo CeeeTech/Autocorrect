@@ -26,111 +26,98 @@ async function correctText(req, res) {
     });
     const { data: saplingData } = saplingResponse;
 
-    // Step 2: split the original text into an array of sentences according to the sapling edits.sentence_start of each edit element.
-    const sentences = [];
-    let start = 0;
-    saplingData.edits.forEach((edit, index) => {
-    const { sentence_start } = edit;
-    
-    // Ignore the first slice if sentence_start is 0
-    if (index > 0) {
-        sentences.push(text.slice(start, sentence_start));
-    }
+    // Step 2: Apply Sapling edits
+    let saplingCorrectedText = applySaplingEdits(text, saplingData.edits);
 
-    start = sentence_start;
-    });
+    // // Step 3: Run post-processing with OpenAI to detect additional issues
+    // const correctionPrompt = `Please proofread the following text for any spelling, punctuation, and capitalization errors: ${saplingCorrectedText}`;
+    // const feedbackResponse = await openai.chat.completions.create({
+    //   model: "gpt-4",
+    //   messages: [{ role: "user", content: correctionPrompt }],
+    // });
 
-    // Add the last slice of the remaining text
-    sentences.push(text.slice(start));
+    // const fullyCorrectedText = feedbackResponse.choices[0].message.content.trim();
 
-    console.log(sentences);
-    
-
-    // Step 2: Process Sapling AI's edits to create bolded and corrected version
-    let modifiedText = text;
-    let offset = 0; // Track how much the text has shifted after each replacement
-
-    saplingData.edits.forEach((edit) => {
-        const { sentence_start, start, end, replacement } = edit;
-
-        // Adjust start and end by the current offset
-        const adjustedStart = sentence_start + start + offset;
-        const adjustedEnd = sentence_start + end + offset;
-
-        // Get the incorrect text using the adjusted indices
-        const incorrectText = modifiedText.slice(adjustedStart, adjustedEnd);
-        console.log("incorrectText ", incorrectText);
-
-        // Create the replacement with bold and double brackets
-        const correctedText = `**${incorrectText}** ((${replacement}))`;
-
-        // Replace the incorrect text with the corrected text in the modified text
-        modifiedText = modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
-
-        // Update the offset: difference in length between correctedText and incorrectText
-        offset += correctedText.length - incorrectText.length;
-
-        console.log(modifiedText);
-    });
-
-    // Step 3: Process Sapling AI's edits to create just the corrected version without any stylings. use the same way as above
-    let correctedText = text;
-    let offset1 = 0; // Track how much the text has shifted after each replacement
-    
-    saplingData.edits.forEach((edit) => {
-        const { sentence_start, start, end, replacement } = edit;
-
-        // Adjust start and end by the current offset
-        const adjustedStart = sentence_start + start + offset1;
-        const adjustedEnd = sentence_start + end + offset1;
-
-        // Get the incorrect text using the adjusted indices
-        const incorrectText = correctedText.slice(adjustedStart, adjustedEnd);
-        console.log("incorrectText ", incorrectText);
-
-        // Create the replacement with bold and double brackets
-        const correctedText1 = `${replacement}`;
-
-        // Replace the incorrect text with the corrected text in the modified text
-        correctedText = correctedText.slice(0, adjustedStart) + correctedText1 + correctedText.slice(adjustedEnd);
-
-        // Update the offset: difference in length between correctedText and incorrectText
-        offset1 += correctedText1.length - incorrectText.length;
-
-        console.log(correctedText);
-    });
-
-    // Step 4: Request ChatGPT to format the response
-    const chatGptPrompt = `Make the following text grammatically, spelling-wise, and punctuation-wise correct. Bold the given incorrect words, phrases, or punctuation, and provide the corrected version in double brackets ((example)) next to them. If any word or punctuation is missing in the given text, wrap it inside ##. Here is the text: ${modifiedText}`;
-
-    const openaiResponse = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: chatGptPrompt }],
-    });
-
-    const chatGptCorrectedText = openaiResponse.choices[0].message.content;
-
-    // Step 5: Generate descriptive feedback from ChatGPT with grammar explanations
-    const feedbackPrompt = `Based on the following Sapling AI edits, provide a detailed explanation of the grammatical errors, referencing English grammar rules. Here are the edits: ${JSON.stringify(saplingData.edits)}. The original text is: ${text}. Please write a coherent paragraph explaining the errors, why they are incorrect, and suggestions for improvement, focusing on the grammar aspects.`;
-
-    const feedbackResponse = await openai.chat.completions.create({
+    // Step 5: Generate detailed feedback for students
+    const feedbackPrompt = `Based on the following Sapling AI edits and OpenAI corrections, provide a detailed explanation of the grammatical errors, spelling mistakes, and other issues. The original text is: "${text}". The Sapling corrections are: ${JSON.stringify(saplingData.edits)}. The final corrected text is: "${saplingCorrectedText}". Explain why each correction was necessary.`;
+    const detailedFeedbackResponse = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "user", content: feedbackPrompt }],
     });
 
-    const descriptiveFeedback = feedbackResponse.choices[0].message.content;
+    const detailedFeedback = detailedFeedbackResponse.choices[0].message.content;
 
-    // Step 6: Return the final corrected text and feedback
+    // Step 6: Return the final result
     res.status(200).json({
       originalText: text,
-      correctedText: correctedText,
-      modifiedText: chatGptCorrectedText,
-      feedback: descriptiveFeedback,
+      saplingCorrectedText,
+      // fullyCorrectedText,
+      detailedFeedback,
+      saplingEdits: saplingData.edits,
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'An error occurred while processing the text.' });
   }
+}
+
+// Helper function to apply Sapling edits
+function applySaplingEdits(text, edits) {
+  let modifiedText = text;
+  let offset = 0;
+
+  edits.forEach((edit) => {
+    const { sentence_start, start, end, replacement } = edit;
+    const adjustedStart = sentence_start + start + offset;
+    const adjustedEnd = sentence_start + end + offset;
+    const incorrectText = modifiedText.slice(adjustedStart, adjustedEnd);
+
+    // Create the replacement with the desired formatting
+    const correctedText = `**${incorrectText}** ((${replacement}))`;
+    modifiedText = modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
+
+    // Update offset
+    offset += correctedText.length - incorrectText.length;
+  });
+
+  return modifiedText;
+}
+
+// Helper function to merge Sapling and OpenAI corrections with formatting
+function mergeCorrectionsWithFormatting(originalText, fullyCorrectedText) {
+  let formattedText = originalText;
+
+  const originalWords = originalText.split(/\b/);  // Split by word boundaries
+  const words = fullyCorrectedText.split(/\b/);      // Same split for OpenAI corrections
+
+  let formattedArray = [];
+  let originalIndex = 0;
+
+  // Loop through the OpenAI corrected words and compare them with the original
+  for (let i = 0; i < words.length; i++) {
+    const openaiWord = words[i].trim();
+    const originalWord = originalWords[originalIndex] ? originalWords[originalIndex].trim() : null;
+
+    // Case 1: Added punctuation or new words from OpenAI
+    if (openaiWord && !originalWord) {
+      formattedArray.push(`####${openaiWord}####`);
+    } 
+    // Case 2: OpenAI corrected word that differs from the original
+    else if (openaiWord && originalWord && openaiWord !== originalWord) {
+      formattedArray.push(`**${originalWord}** ((${openaiWord}))`);
+      originalIndex++;
+    } 
+    // Case 3: Words are the same, no correction
+    else if (openaiWord === originalWord) {
+      formattedArray.push(openaiWord);
+      originalIndex++;
+    }
+  }
+
+  // Join the array back into a string
+  formattedText = formattedArray.join(' ');
+
+  return formattedText;
 }
 
 module.exports = {
