@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Box, TextField, Typography } from '@mui/material';
+import { Button, Box, TextField, Typography, Grid, Grid2 } from '@mui/material';
+import shadows from '@mui/material/styles/shadows';
 
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
@@ -13,11 +14,34 @@ export default function Home() {
     };
 
     const buttonList = [
-        { label: 'Persuasive Essay Writing', gradient: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)' },
-        { label: 'Text Response Essays', gradient: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)' },
-        { label: 'Narrative Writing', gradient: 'linear-gradient(90deg, #fda301 20%, #fdd402 90%)' },
-        { label: 'Language Analysis', gradient: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)' },
-        { label: 'Letter Writing', gradient: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)' },
+        { label: 'Student', background:'#e43292', color: 'white'  },
+        { label: 'Teacher', background:'#e43292', color: 'white' },
+    ];
+
+    const buttonList2 = [
+        { label: 'UK English', background:'#4f51ee', color: 'white'  },
+        { label: 'US English', background:'#4f51ee', color: 'white' },
+    ];
+
+    const buttonList3a = [
+        { label: 'Year 1', background:'#4f51ee', color: 'white'  },
+        { label: 'Year 2', background:'#4f51ee', color: 'white' },
+        { label: 'Year 3', background:'#4f51ee', color: 'white' },
+        { label: 'Year 4', background:'#4f51ee', color: 'white' },
+    ];
+
+    const buttonList3b = [
+        { label: 'Year 5', background:'#4f51ee', color: 'white' },
+        { label: 'Year 6', background:'#4f51ee', color: 'white' },
+        { label: 'Year 7', background:'#4f51ee', color: 'white' },
+        { label: 'Year 8', background:'#4f51ee', color: 'white' },
+    ];
+
+    const buttonList3c = [
+        { label: 'Year 9', background:'#4f51ee', color: 'white' },
+        { label: 'Year 10', background:'#4f51ee', color: 'white' },
+        { label: 'Year 11', background:'#4f51ee', color: 'white' },
+        { label: 'Year 12', background:'#4f51ee', color: 'white' },
     ];
 
     const handleSubmit = async () => {
@@ -47,8 +71,12 @@ export default function Home() {
         alert('Text copied to clipboard');
     };
 
-    const handleSaveAsPDF = () => {
-        alert('Saving as PDF');
+    const handleSubmitAsSPDF = () => {
+        alert('Submitting as Student');
+    };
+
+    const handleSubmitAsTPDF = () => {
+        alert('Submitting as Teacher');
     };
     
     const parseModifiedText = (text) => {
@@ -61,211 +89,333 @@ export default function Home() {
     };    
 
     return (
-        <Box sx={{ background: '#FAFAFA', padding: { xs: 2, md: 2 } }}>
-            <Box
+
+        <Box sx={{ background: '#FAFAFA', padding: {} }}>
+            <Box 
+                fullWidth
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    padding: 2,
-                    background: 'white',
-                    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-                    borderRadius: 2,
-                    maxWidth: { xs: '100%', md: '100%' },
-                    margin: 'auto',
-                    fontFamily: 'Poppins, sans-serif',
+                    padding:1.5,
+                    fontFamily: 'poppins',
+                    fontWeight:100,
+                    fontSize:'30px',
+                    textAlign:'center',
+                    color: 'black',
+                    textTransform: 'none',
                 }}
             >
-                {/* Buttons */}
+                Choose your options for corrections and customized feedback.
+            </Box>  
+            <Box 
+                sx={{
+                    height:'auto',
+                    padding:4,
+                    fontFamily: 'Poppins',
+                    fontSize:'25px',
+                    textAlign: 'center',
+                    color: 'white',
+                    textTransform: 'none',
+                    background: 'linear-gradient(90deg, #2b8ed5 0%, #4f50ed 40%, #4f50ed 60%, #2b8ed5 100%)',
+                }}
+            >
+                <p1>Who is Submitting?</p1>
                 <Box
                     sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        flexWrap: 'wrap',
-                        gap: 1,
-                        width: '100%',
-                        mb: 2,
-                    }}
-                >
-                    {buttonList.map((item, index) => (
-                        <Button
-                            key={index}
-                            fullWidth
-                            onClick={() => handleButtonClick(item.label)}
-                            sx={{
-                                flexBasis: { xs: '100%', sm: '45%', md: '18%' },
-                                fontSize: '12px',
-                                borderRadius: 2,
-                                color: 'white',
-                                border: selectedButton === item.label
-                                    ? '2px solid #d23e69'
-                                    : '0px solid white',
-                                textTransform: 'none',
-                                background: item.gradient,
-                                maxHeight: '50px',
-                                fontFamily: 'Poppins, sans-serif',
-                            }}
-                        >
-                            {item.label}
-                        </Button>
-                    ))}
-                </Box>
-
-                {/* Instruction Text */}
-                <Typography
-                    align={'center'}
-                    sx={{
-                        fontSize: '16px',
-                        fontFamily: 'Poppins, sans-serif',
-                        color: '#4F51EE',
-                        fontWeight: 'bold',
-                        m: 2,
-                    }}
-                >
-                    {text}
-                </Typography>
-
-                {/* Text areas for story and corrections */}
-                <Box
-                    sx={{
-                        display: 'flex',
                         flexDirection: { xs: 'column', md: 'row' },
                         width: '100%',
-                        gap: 2,
+                        display:'flex',
                     }}
                 >
-                    {/* User Story Input */}
                     <Box sx={{ flex: 1 }}>
                         <Box>
                             <Typography
                                 align={'center'}
                                 mb={1}
                                 sx={{
-                                    fontFamily: 'Poppins, sans-serif',
+                                    fontFamily: 'Poppins',
                                     fontSize: '16px',
-                                    fontWeight: 'bold',
+                                    fontWeight: 100,
                                 }}
                             >
-                                Your Story
+                                <br/>
+                                The student option will provide correction and <br/>
+                                feedback for students and parents. Multiple <br/>
+                                feedback languages are available. <br/>
                             </Typography>
-                            <TextField
-                                multiline
-                                minRows={6}
-                                fullWidth
-                                value={story} // Controlled input
-                                onChange={(e) => setStory(e.target.value)} // Update state on change
-                                sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: '#1cd1fb',
-                                            borderWidth: '2px',
-                                            borderRadius: 3,
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: '#1cd1fb',
-                                            borderWidth: '2px',
-                                            borderRadius: 3,
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: '#1cd1fb',
-                                            borderWidth: '2px',
-                                            borderRadius: 3,
-                                        },
-                                    },
-                                    background: '#f4f4f6',
-                                    fontFamily: 'Poppins, sans-serif',
-                                }}
-                            />
-                        </Box>
-
-                        {/* button for submit for correction */}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                mt: 2,
-                            }}
-                        >
                             <Button
-                                onClick={handleSubmit} // Call the submit function on click
+                                onClick={handleSubmitAsSPDF} 
                                 sx={{
-                                    padding: 1,
-                                    fontSize: '12px',
-                                    paddingLeft: 8,
-                                    paddingRight: 8,
-                                    borderRadius: 10,
+                                    //flexBasis: { xs: '100%', sm: '45%', md: '18%' },
+                                    height:45,
+                                    width: 360,
+                                    marginTop: 2,
                                     color: 'white',
                                     textTransform: 'none',
-                                    background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
-                                    fontFamily: 'Poppins, sans-serif',
+                                    background: '#e43292',
+                                    border:'2px, solid, white',
+                                    fontFamily: 'Poppins',
+                                    borderRadius: 3,
+                                    position:'relative',
+                                    justifyContent:'center',
+                                    alignItems:'center',
+                                    alignContent:'center'
                                 }}
                             >
-                                Submit For Correction
+                                Student
                             </Button>
                         </Box>
                     </Box>
 
-                    {/* AI-Generated Corrections */}
                     <Box sx={{ flex: 1 }}>
                         <Box>
                             <Typography
-                                mb={1}
                                 align={'center'}
+                                mb={1}
                                 sx={{
                                     fontFamily: 'Poppins, sans-serif',
                                     fontSize: '16px',
-                                    fontWeight: 'bold',
+                                    fontWeight: 100,
+                                    
                                 }}
                             >
-                                AI-Generated Corrections
+                            <br />
+                            The teacher option will provide corrections and <br/>
+                            feedback as though they are written by a teacher. <br/>
+                            You can edit and add your own feedback. <br/>
                             </Typography>
-                            <Box
-                                sx={{
-                                    background: '#fee5ea',
-                                    fontFamily: 'Poppins, sans-serif',
-                                    padding: 2,
-                                    minHeight: '150px',
-                                    border: '2px solid #d23e69',
-                                    borderRadius: '5px',
-                                }}
-                                dangerouslySetInnerHTML={{ __html: modifiedText }} // Render the formatted HTML
-                            />
-                        </Box>
-                        {/* button for copy text */}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                                mt: 2,
-                            }}
-                        >
-                            {/* button to save as pdf */}
                             <Button
-                                onClick={handleSaveAsPDF} // Call the save function on click
+                                onClick={handleSubmitAsSPDF} 
                                 sx={{
+                                    //flexBasis: { xs: '100%', sm: '45%', md: '18%' },
+                                    height:45,
+                                    width: 360,
+                                    marginTop: 2,
                                     color: 'white',
                                     textTransform: 'none',
-                                    background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
-                                    fontFamily: 'Poppins, sans-serif',
-                                    mr: 1,
+                                    background: '#e43292',
+                                    border:'2px, solid, white',
+                                    fontFamily: 'Poppins',
+                                    borderRadius: 3,
                                 }}
                             >
-                                Save as PDF
-                            </Button>
-                            <Button
-                                onClick={handleCopyText} // Call the copy function on click
-                                sx={{
-                                    fontFamily: 'Poppins, sans-serif',
-                                    fontSize: '12px',
-                                    backgroundColor: '#f4f4f6',
-                                }}
-                            >
-                                Copy Text
+                                Student
                             </Button>
                         </Box>
                     </Box>
                 </Box>
             </Box>
+
+            <Box 
+                fullWidth
+                sx={{
+                    height: 'auto',
+                    padding:6,
+                    fontFamily: 'sans-serif: Arial',
+                    fontSize:'30px',
+                    fontWeight: 900,
+                    textAlign: 'center',
+                    color: '#4f51ee',
+                    textTransform: 'none',
+                    background: '#f7f7f7',
+                }}
+            >
+            <p1>Select the preferred English variant</p1>
+                <Typography
+                    mb={4}
+                    align={'center'}
+                    sx={{
+                        fontFamily: 'Poppins',
+                        fontSize: '18px',
+                        color:'black'
+                    }}
+                >
+                    <br/>
+                    UK English is commonly used in the United Kingdom, Australia, New Zealand, India and Sri Lanka. <br/>
+                    US English is commonly used in the United States, South America, Philippines, and many countries in Europe.<br/>
+                </Typography>
+
+                {buttonList2.map((item, index) => (
+                    <Button
+                        key={index}
+                        fullWidth
+                        onClick={() => handleButtonClick(item.label)}
+                        sx={{
+                            flexBasis: { xs: '100%', sm: '45%', md: '18%' },
+                            height:55,
+                            width: 300,
+                            borderRadius: 3,
+                            color: 'white',
+                            border:'2px, solid, white',
+                            textTransform: 'none',
+                            background: '#4f51ee',
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            fontWeight: 100,
+                            margin: 0.25,
+                            boxShadow: 4
+                        }}
+                    >
+                        {item.label}
+                    </Button>
+                ))}
+            </Box>
+
+
+            <Box 
+                fullWidth
+                sx={{
+                    height: 'auto',
+                    padding:6,
+                    fontFamily: 'sans-serif: Arial',
+                    fontSize:'30px',
+                    fontWeight: 900,
+                    textAlign: 'center',
+                    color: '#4f51ee',
+                    textTransform: 'none',
+                    background: 'white',
+                }}
+            >
+            <p1>Select the school year level</p1>
+                <Typography
+                    mb={4}
+                    align={'center'}
+                    sx={{
+                        fontFamily: 'Poppins',
+                        fontSize: '20px',
+                        color:'black'
+                    }}
+                >
+                    <br/>
+                    The complexity of language and feedback will be provided to the student according to their year level. <br/>
+                </Typography> 
+                {buttonList3a.map((item, index) => (
+                    <Button
+                        key={index}
+                        fullWidth
+                        onClick={() => handleButtonClick(item.label)}
+                        sx={{
+                            flexBasis: { xs: '100%', sm: '45%', md: '18%' },
+                            height:55,
+                            width: 290,
+                            borderRadius: 3,
+                            color: 'white',
+                            border:'2px, solid, white',
+                            textTransform: 'none',
+                            background: '#4f51ee',
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            fontWeight: 100,
+                            margin: 0.25,
+                            boxShadow: 4
+                        }}
+                    >
+                        {item.label}
+                    </Button>
+                ))}
+
+                {buttonList3b.map((item, index) => (
+                    <Button
+                        key={index}
+                        fullWidth
+                        onClick={() => handleButtonClick(item.label)}
+                        sx={{
+                            flexBasis: { xs: '100%', sm: '45%', md: '18%' },
+                            height:55,
+                            width: 290,
+                            borderRadius: 3,
+                            color: 'white',
+                            border:'2px, solid, white',
+                            textTransform: 'none',
+                            background: '#4f51ee',
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            fontWeight: 100,
+                            margin: 0.25,
+                            boxShadow: 4
+                        }}
+                    >
+                        {item.label}
+                    </Button>
+                ))}
+
+                {buttonList3c.map((item, index) => (
+                    <Button
+                        key={index}
+                        fullWidth
+                        onClick={() => handleButtonClick(item.label)}
+                        sx={{
+                            flexBasis: { xs: '100%', sm: '45%', md: '18%' },
+                            height:55,
+                            width: 290,
+                            borderRadius: 3,
+                            color: 'white',
+                            border:'2px, solid, white',
+                            textTransform: 'none',
+                            background: '#4f51ee',
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            fontWeight: 100,
+                            margin: 0.25,
+                            boxShadow: 4
+                        }}
+                    >
+                        {item.label}
+                    </Button>
+                ))}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                {/* <Grid container  maxWidth="75">
+                {buttonList3.map((item, index) => ( 
+                    <Grid item xs={2} sm={3} key={index}>
+                    <Button
+                        onClick={() => handleButtonClick(item.label)}
+                        sx={{
+                            height:55,
+                            width: 200,
+                            borderRadius: 3,
+                            color: 'white',
+                            border:'2px, solid, white',
+                            textTransform: 'none',
+                            background: '#4f51ee',
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                            fontWeight: 100,
+                            margin: 0.25,
+                            boxShadow: 4
+                        }}
+                    >
+                        {item.label}
+                    </Button>
+                    </Grid>
+                ))}
+                </Grid> */}
+            </Box>    
+
+
         </Box>
     );
 }
