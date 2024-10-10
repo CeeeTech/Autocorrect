@@ -40,7 +40,7 @@ async function correctText(req, res) {
     // const fullyCorrectedText = feedbackResponse.choices[0].message.content.trim();
 
     // Step 5: Generate detailed feedback for students
-    const feedbackPrompt = `Based on the following Sapling AI edits and OpenAI corrections, provide a detailed explanation of the grammatical errors, spelling mistakes, and other issues. The original text is: "${text}". The Sapling corrections are: ${JSON.stringify(saplingData.edits)}. The final corrected text is: "${saplingCorrectedText}". Explain why each correction was necessary.`;
+    const feedbackPrompt = `Based on the following Sapling AI edits and OpenAI corrections, provide a detailed explanation of the grammatical errors, spelling mistakes, and other issues. The original text is: "${text}". The Sapling corrections are: ${JSON.stringify(saplingData.edits)}. The final corrected text is: "${saplingCorrectedText}". Explain why each correction was necessary. this should be very familiar explanation for a student. better if you can give it point wise for each correction. `;
     const detailedFeedbackResponse = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "user", content: feedbackPrompt }],
