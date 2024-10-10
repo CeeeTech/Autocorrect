@@ -1,5 +1,6 @@
 const axios = require('axios');
 const OpenAI = require('openai');
+const qs = require('qs');
 require('dotenv').config();
 
 // Get the Sapling and OpenAI API keys from environment variables
@@ -120,6 +121,61 @@ function mergeCorrectionsWithFormatting(originalText, fullyCorrectedText) {
   return formattedText;
 }
 
+async function LanguageToolCheckSpelling(req, res) {
+  const { text } = req.body;
+  try {
+      const response = await axios.post(
+          'https://languagetool.org/api/v2/check',
+          new URLSearchParams({
+              text: text,
+              language: 'en-US',
+              enabledRules: 'MORFOLOGIK_RULE_EN_US', // Enable only spelling rules
+              disabledRules: 'EN_QUOTES,EN_UNPAIRED_BRACKETS,EN_COMMA_PARENTHESIS,EN_CONTRACTIONS,EN_UNDERSCORE,EN_NUMBERS' // Disable specific other rules
+          }),
+          {
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+              },
+          }
+      );
+
+      const { data } = response;
+
+      // Extract spelling issues and format them
+      const spellingMistakes = data.matches.map(match => {
+          const bestReplacement = getBestReplacement(match.replacements);
+          return {
+              offset: match.offset,
+              length: match.length,
+              "best replacement": bestReplacement
+          };
+      });
+
+      res.status(200).json({
+          spellingMistakes: spellingMistakes // Return the formatted spelling mistakes
+      });
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'An error occurred while processing the text.' });
+  }
+}
+
+// Helper function to determine the best replacement
+function getBestReplacement(replacements) {
+  if (!replacements || replacements.length === 0) {
+      return null;
+  }
+
+  // For simplicity, we can prioritize longer suggestions or those that are more similar
+  // You can implement more complex logic here, like checking frequency, semantic similarity, etc.
+
+  return replacements.reduce((best, current) => {
+      // Example condition: prefer longer suggestions or you can use other criteria
+      return current.value.length > best.value.length ? current : best;
+  }).value; // Return the value of the best suggestion
+}
+
 module.exports = {
   correctText,
+  LanguageToolCheckSpelling,
 };

@@ -36,7 +36,7 @@ export default function Home() {
 
             const data = await response.json();
             console.log(data);
-            setModifiedText(parseModifiedText(data.modifiedText)); // Update the corrected text state
+            setModifiedText(parseModifiedText(data.saplingCorrectedText)); // Update the corrected text state
 
         } catch (error) {
             console.error('Error fetching the corrected text:', error);

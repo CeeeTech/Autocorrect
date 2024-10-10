@@ -32,7 +32,7 @@ async function correctText(req, res) {
     const correctedText = response.choices[0].message.content.trim();
 
     // Send the corrected and formatted text back without additional escape characters
-    res.status(200).send(correctedText);
+    res.status(200).send({correctedText});
   } catch (error) {
     console.error('Error with OpenAI API:', error);
     res.status(500).send('Error processing the text');
