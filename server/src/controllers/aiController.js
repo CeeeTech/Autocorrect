@@ -30,29 +30,40 @@ async function correctText(req, res) {
     // Step 2: Apply Sapling edits
     let saplingCorrectedText = applySaplingEdits(text, saplingData.edits);
 
-    // // Step 3: Run post-processing with OpenAI to detect additional issues
-    // const correctionPrompt = `Please proofread the following text for any spelling, punctuation, and capitalization errors: ${saplingCorrectedText}`;
-    // const feedbackResponse = await openai.chat.completions.create({
-    //   model: "gpt-4",
-    //   messages: [{ role: "user", content: correctionPrompt }],
-    // });
+    // Step 3: Call OpenAI to correct any missing errors
+    const gptResponse = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        { 
+          role: 'system', 
+          content: "You are a grammar and punctuation correction tool. Your task is to only correct missing spelling, capitalization, or punctuation issues in the given text without changing the provided corrections and giving the fully corrected version without formatting." 
+        },
+        {
+          role: 'user',
+          content: `${saplingCorrectedText}`
+        }
+      ],
+      max_tokens: 500,
+      temperature: 0.3,
+    });
 
-    // const fullyCorrectedText = feedbackResponse.choices[0].message.content.trim();
+    const gptCorrectedText = gptResponse.choices[0].message.content;
 
-    // Step 5: Generate detailed feedback for students
-    const feedbackPrompt = `Based on the following Sapling AI edits and OpenAI corrections, provide a detailed explanation of the grammatical errors, spelling mistakes, and other issues. The original text is: "${text}". The Sapling corrections are: ${JSON.stringify(saplingData.edits)}. The final corrected text is: "${saplingCorrectedText}". Explain why each correction was necessary. this should be very familiar explanation for a student. better if you can give it point wise for each correction. `;
+    // Step 4: Generate detailed feedback for students
+    const feedbackPrompt = `Based on the following Sapling AI edits and OpenAI corrections, provide a detailed explanation of the grammatical errors, spelling mistakes, and other issues. The original text is: "${text}". The Sapling corrections are: ${JSON.stringify(saplingData.edits)}. The final corrected text is: "${gptCorrectedText}". Explain why each correction was necessary in a student-friendly way, with a point-wise breakdown.`;
+
     const detailedFeedbackResponse = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: feedbackPrompt }],
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: feedbackPrompt }],
     });
 
     const detailedFeedback = detailedFeedbackResponse.choices[0].message.content;
 
-    // Step 6: Return the final result
+    // Step 5: Return the final result
     res.status(200).json({
       originalText: text,
       saplingCorrectedText,
-      // fullyCorrectedText,
+      gptCorrectedText,
       detailedFeedback,
       saplingEdits: saplingData.edits,
     });

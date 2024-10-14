@@ -5,6 +5,7 @@ export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
     const [text, setText] = useState('Select your writing type and let our AI help you make it flawless.');
     const [modifiedText, setModifiedText] = useState(''); // State to hold corrected text
+    const [correctedText, setCorrectedText] = useState(''); // State to hold corrected text
     const [story, setStory] = useState(''); // State to hold user input text
 
     const handleButtonClick = (label) => {
@@ -37,6 +38,7 @@ export default function Home() {
             const data = await response.json();
             console.log(data);
             setModifiedText(parseModifiedText(data.saplingCorrectedText)); // Update the corrected text state
+            setCorrectedText(data.gptCorrectedText); // Update the corrected text state
 
         } catch (error) {
             console.error('Error fetching the corrected text:', error);
@@ -205,7 +207,7 @@ export default function Home() {
                         </Box>
                     </Box>
 
-                    {/* AI-Generated Corrections */}
+                    {/* Sapling-Corrections */}
                     <Box sx={{ flex: 1 }}>
                         <Box>
                             <Typography
@@ -217,7 +219,7 @@ export default function Home() {
                                     fontWeight: 'bold',
                                 }}
                             >
-                                AI-Generated Corrections
+                                Sapling-Corrections
                             </Typography>
                             <Box
                                 sx={{
@@ -265,6 +267,78 @@ export default function Home() {
                         </Box>
                     </Box>
                 </Box>
+
+                {/* Text areas corrected text */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        width: '100%',
+                        gap: 2,
+                    }}
+                >
+                    {/* Corrected Text */}
+                    <Box sx={{ flex: 1 }}>
+                        <Box>
+                            <Typography
+                                mb={1}
+                                align={'center'}
+                                sx={{
+                                    fontFamily: 'Poppins, sans-serif',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                Corrected Text
+                            </Typography>
+                            <Box
+                                sx={{
+                                    background: '#DFFEDA',
+                                    fontFamily: 'Poppins, sans-serif',
+                                    padding: 2,
+                                    minHeight: '150px',
+                                    border: '2px solid #116600',
+                                    borderRadius: '5px',
+                                }}
+                                dangerouslySetInnerHTML={{ __html: correctedText }} // Render the formatted HTML
+                            />
+                        </Box>
+                        {/* button for copy text */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                mt: 2,
+                            }}
+                        >
+                            {/* button to save as pdf */}
+                            <Button
+                                onClick={handleSaveAsPDF} // Call the save function on click
+                                sx={{
+                                    color: 'white',
+                                    textTransform: 'none',
+                                    background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
+                                    fontFamily: 'Poppins, sans-serif',
+                                    mr: 1,
+                                }}
+                            >
+                                Save as PDF
+                            </Button>
+                            <Button
+                                onClick={handleCopyText} // Call the copy function on click
+                                sx={{
+                                    fontFamily: 'Poppins, sans-serif',
+                                    fontSize: '12px',
+                                    backgroundColor: '#f4f4f6',
+                                }}
+                            >
+                                Copy Text
+                            </Button>
+                        </Box>
+                    </Box>
+
+                </Box>
+
             </Box>
         </Box>
     );
