@@ -59,11 +59,16 @@ async function correctText(req, res) {
 
     const detailedFeedback = detailedFeedbackResponse.choices[0].message.content;
 
+    const diff = compareText(text, gptCorrectedText);
+    const modifiedText = createModifiedText(text, diff);
+
     // Step 5: Return the final result
     res.status(200).json({
       originalText: text,
       saplingCorrectedText,
       gptCorrectedText,
+      diff,
+      modifiedText,
       detailedFeedback,
       saplingEdits: saplingData.edits,
     });
@@ -87,6 +92,37 @@ function applySaplingEdits(text, edits) {
     // Create the replacement with the desired formatting
     const correctedText = `**${incorrectText}** ((${replacement}))`;
     modifiedText = modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
+
+    // Update offset
+    offset += correctedText.length - incorrectText.length;
+  });
+
+  return modifiedText;
+}
+
+// compare original text and gpt corrected text
+function compareText(originalText, gptCorrectedText) {
+  const originalTextArray = originalText.split(' ');
+  const gptCorrectedTextArray = gptCorrectedText.split(' ');
+
+  const diff = originalTextArray.filter((word, index) => word !== gptCorrectedTextArray[index]);
+
+  return diff;
+}
+
+// create modified text with diff (removed texts should be wrapped inside ** **, newly added text of the removed one should be wrapped and places after the ** ** text, inside (( )) )
+// ex : "i am isurika" => "**i** ((am)) **isurika** ((Isurika))"
+function createModifiedText(originalText, diff) {
+  let modifiedText = originalText;
+  let offset = 0;
+
+  diff.forEach((word) => {
+    const index = originalText.indexOf(word, offset);
+    const incorrectText = modifiedText.slice(index, index + word.length);
+
+    // Create the replacement with the desired formatting
+    const correctedText = `**${incorrectText}** ((${word}))`;
+    modifiedText = modifiedText.slice(0, index) + correctedText + modifiedText.slice(index + word.length);
 
     // Update offset
     offset += correctedText.length - incorrectText.length;
