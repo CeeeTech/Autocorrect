@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Box, TextField, Typography, Grid, Grid2 } from '@mui/material';
 import shadows from '@mui/material/styles/shadows';
-import Submit from '../components/Submit';
-import English from '../components/English';
+import Submit from '../components/Main/Submit';
+import English from '../components/Main/English';
+import Year from '../components/Main/Year';
+import Writing from '../components/Main/Writing';
+import Add from '../components/Sub/AddLang';
+import Corrections from '../components/Main/Corrections';
 
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
@@ -14,27 +18,6 @@ export default function Home() {
         setSelectedButton(label);
         setText(label);
     };
-
-    const buttonList3a = [
-        { label: 'Year 1', background:'#4f51ee', color: 'white'  },
-        { label: 'Year 2', background:'#4f51ee', color: 'white' },
-        { label: 'Year 3', background:'#4f51ee', color: 'white' },
-        { label: 'Year 4', background:'#4f51ee', color: 'white' },
-    ];
-
-    const buttonList3b = [
-        { label: 'Year 5', background:'#4f51ee', color: 'white' },
-        { label: 'Year 6', background:'#4f51ee', color: 'white' },
-        { label: 'Year 7', background:'#4f51ee', color: 'white' },
-        { label: 'Year 8', background:'#4f51ee', color: 'white' },
-    ];
-
-    const buttonList3c = [
-        { label: 'Year 9', background:'#4f51ee', color: 'white' },
-        { label: 'Year 10', background:'#4f51ee', color: 'white' },
-        { label: 'Year 11', background:'#4f51ee', color: 'white' },
-        { label: 'Year 12', background:'#4f51ee', color: 'white' },
-    ];
 
     const handleSubmit = async () => {
         try {
@@ -88,8 +71,10 @@ export default function Home() {
             
             <Submit/>
             <English/>
-            
-
+            <Year/>
+            <Writing/>
+            <Add/>       
+            <Corrections/>
             
 
         </Box>
