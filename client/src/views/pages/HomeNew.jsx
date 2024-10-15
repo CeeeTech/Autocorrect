@@ -14,12 +14,12 @@ export default function Home() {
         setText(label);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (selectedButton) => {
         try {
             const response = await fetch('http://localhost:5000/api/ai/correct-text', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: story }),
+                body: JSON.stringify({ text: story, selectedWritingType: selectedButton }),
             });
 
             if (!response.ok) throw new Error('Network response was not ok');
@@ -153,7 +153,7 @@ export default function Home() {
                             }}
                         />
                         <Button
-                            onClick={handleSubmit}
+                            onClick={() => handleSubmit(selectedButton)} 
                             sx={{
                                 mt: 2, background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
                                 color: 'white', textTransform: 'none', borderRadius: 10

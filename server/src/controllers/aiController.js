@@ -10,7 +10,7 @@ const openai = new OpenAI({
 
 // Correct the text using Sapling AI and ChatGPT
 async function correctText(req, res) {
-  const { text } = req.body;
+  const { text, selectedWritingType } = req.body;
 
   try {
     // Step 1: Get edits from Sapling AI
@@ -24,9 +24,19 @@ async function correctText(req, res) {
 
     // Step 2: Apply Sapling edits
     let saplingCorrectedText = applySaplingEdits(text, saplingData.edits);
-    const gptPrompt = `You are a grammar and punctuation correction tool. Your task is to only correct missing spelling, capitalization, or punctuation issues in the given text without changing the provided corrections and giving the fully corrected version without formatting.You are a grammar correction tool`;
 
-    // Step 3: Call OpenAI for further corrections
+    // Step 3: Prepare the prompt based on writing type
+    let gptPrompt;
+
+    if (selectedWritingType === null) {
+      // If no writing type is selected, just correct grammar and punctuation
+      gptPrompt = `You are a grammar and punctuation correction tool. Your task is to only correct missing spelling, capitalization, or punctuation issues in the given text without changing the provided corrections and giving the fully corrected version without formatting. You are a grammar correction tool.`;
+    } else {
+      // If a writing type is selected, tailor the corrections accordingly
+      gptPrompt = `You are a ${selectedWritingType} writing assistant. Correct any grammar, punctuation, or style issues in the following text while maintaining the intended writing style of a ${selectedWritingType}. Provide the fully corrected version without formatting.`;
+    }
+
+    // Step 4: Call OpenAI for further corrections
     const gptResponse = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -39,16 +49,44 @@ async function correctText(req, res) {
 
     const gptCorrectedText = gptResponse.choices[0].message.content;
 
-    // Step 4: Highlight the differences
+    // Step 5: Highlight the differences
     const highlightedText = highlightChanges(text, gptCorrectedText);
 
-    // Step 5: Send response with results
+    // Step 6: Generate constructive feedback based on writing type
+    const feedbackResponse = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: `Provide constructive feedback on the changes made to the text according to the writing style of ${selectedWritingType}.` },
+        { role: 'user', content: highlightedText },
+      ],
+      max_tokens: 100,
+      temperature: 0.3,
+    });
+
+    const feedback = feedbackResponse.choices[0].message.content;
+
+    // Step 7: Generate positive aspects of the text based on writing type
+    const positiveFeedbackResponse = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: `Provide positive feedback on the text according to the writing style of ${selectedWritingType}.` },
+        { role: 'user', content: text },
+      ],
+      max_tokens: 100,
+      temperature: 0.3,
+    });
+
+    const positiveFeedback = positiveFeedbackResponse.choices[0].message.content;
+
+    // Step 8: Send response with results
     res.status(200).json({
+      selectedWritingType,
       originalText: text,
       saplingCorrectedText,
       gptCorrectedText,
       highlightedText,
-      saplingEdits: saplingData.edits,
+      feedback,
+      positiveFeedback,
     });
   } catch (err) {
     console.error(err);
