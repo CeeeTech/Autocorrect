@@ -37,7 +37,7 @@ export default function Home() {
 
             const data = await response.json();
             console.log(data);
-            setModifiedText(parseModifiedText(data.saplingCorrectedText)); // Update the corrected text state
+            setModifiedText(parseModifiedText(data.highlightedText)); // Update the corrected text state
             setCorrectedText(data.gptCorrectedText); // Update the corrected text state
 
         } catch (error) {
@@ -207,7 +207,7 @@ export default function Home() {
                         </Box>
                     </Box>
 
-                    {/* Sapling-Corrections */}
+                    {/* AI-Generated Corrections */}
                     <Box sx={{ flex: 1 }}>
                         <Box>
                             <Typography
@@ -219,7 +219,7 @@ export default function Home() {
                                     fontWeight: 'bold',
                                 }}
                             >
-                                Sapling-Corrections
+                                AI-Generated Corrections
                             </Typography>
                             <Box
                                 sx={{

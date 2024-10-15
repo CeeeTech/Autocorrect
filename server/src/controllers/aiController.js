@@ -1,17 +1,11 @@
 const axios = require('axios');
 const OpenAI = require('openai');
-const qs = require('qs');
+const { diffWords } = require('diff'); // Import diff library
 require('dotenv').config();
-
-// Get the Sapling and OpenAI API keys from environment variables
-const saplingApiKey = process.env.SAPLING_API_KEY;
-const openaiApiKey = process.env.OPENAI_API_KEY;
-const saplingUrl = 'https://api.sapling.ai/api/v1/edits';
-const session_id = process.env.COOKIE_KEY;
 
 // Initialize OpenAI API client
 const openai = new OpenAI({
-  apiKey: openaiApiKey,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 // Correct the text using Sapling AI and ChatGPT
@@ -20,28 +14,24 @@ async function correctText(req, res) {
 
   try {
     // Step 1: Get edits from Sapling AI
-    const saplingResponse = await axios.post(saplingUrl, {
-      key: saplingApiKey,
-      session_id: session_id,
+    const saplingResponse = await axios.post('https://api.sapling.ai/api/v1/edits', {
+      key: process.env.SAPLING_API_KEY,
+      session_id: process.env.COOKIE_KEY,
       text,
     });
+
     const { data: saplingData } = saplingResponse;
 
     // Step 2: Apply Sapling edits
     let saplingCorrectedText = applySaplingEdits(text, saplingData.edits);
+    const gptPrompt = `You are a grammar and punctuation correction tool. Your task is to only correct missing spelling, capitalization, or punctuation issues in the given text without changing the provided corrections and giving the fully corrected version without formatting.You are a grammar correction tool`;
 
-    // Step 3: Call OpenAI to correct any missing errors
+    // Step 3: Call OpenAI for further corrections
     const gptResponse = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
-        { 
-          role: 'system', 
-          content: "You are a grammar and punctuation correction tool. Your task is to only correct missing spelling, capitalization, or punctuation issues in the given text without changing the provided corrections and giving the fully corrected version without formatting." 
-        },
-        {
-          role: 'user',
-          content: `${saplingCorrectedText}`
-        }
+        { role: 'system', content: gptPrompt },
+        { role: 'user', content: saplingCorrectedText },
       ],
       max_tokens: 500,
       temperature: 0.3,
@@ -49,27 +39,15 @@ async function correctText(req, res) {
 
     const gptCorrectedText = gptResponse.choices[0].message.content;
 
-    // Step 4: Generate detailed feedback for students
-    const feedbackPrompt = `Based on the following Sapling AI edits and OpenAI corrections, provide a detailed explanation of the grammatical errors, spelling mistakes, and other issues. The original text is: "${text}". The Sapling corrections are: ${JSON.stringify(saplingData.edits)}. The final corrected text is: "${gptCorrectedText}". Explain why each correction was necessary in a student-friendly way, with a point-wise breakdown.`;
+    // Step 4: Highlight the differences
+    const highlightedText = highlightChanges(text, gptCorrectedText);
 
-    const detailedFeedbackResponse = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: feedbackPrompt }],
-    });
-
-    const detailedFeedback = detailedFeedbackResponse.choices[0].message.content;
-
-    const diff = compareText(text, gptCorrectedText);
-    const modifiedText = createModifiedText(text, diff);
-
-    // Step 5: Return the final result
+    // Step 5: Send response with results
     res.status(200).json({
       originalText: text,
       saplingCorrectedText,
       gptCorrectedText,
-      diff,
-      modifiedText,
-      detailedFeedback,
+      highlightedText,
       saplingEdits: saplingData.edits,
     });
   } catch (err) {
@@ -89,46 +67,31 @@ function applySaplingEdits(text, edits) {
     const adjustedEnd = sentence_start + end + offset;
     const incorrectText = modifiedText.slice(adjustedStart, adjustedEnd);
 
-    // Create the replacement with the desired formatting
     const correctedText = `**${incorrectText}** ((${replacement}))`;
-    modifiedText = modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
+    modifiedText =
+      modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
 
-    // Update offset
     offset += correctedText.length - incorrectText.length;
   });
 
   return modifiedText;
 }
 
-// compare original text and gpt corrected text
-function compareText(originalText, gptCorrectedText) {
-  const originalTextArray = originalText.split(' ');
-  const gptCorrectedTextArray = gptCorrectedText.split(' ');
+// Highlight changes between original and corrected text
+function highlightChanges(original, corrected) {
+  const diff = diffWords(original, corrected); // Get word-level differences
+  let result = '';
 
-  const diff = originalTextArray.filter((word, index) => word !== gptCorrectedTextArray[index]);
-
-  return diff;
-}
-
-// create modified text with diff (removed texts should be wrapped inside ** **, newly added text of the removed one should be wrapped and places after the ** ** text, inside (( )) )
-// ex : "i am isurika" => "**i** ((am)) **isurika** ((Isurika))"
-function createModifiedText(originalText, diff) {
-  let modifiedText = originalText;
-  let offset = 0;
-
-  diff.forEach((word) => {
-    const index = originalText.indexOf(word, offset);
-    const incorrectText = modifiedText.slice(index, index + word.length);
-
-    // Create the replacement with the desired formatting
-    const correctedText = `**${incorrectText}** ((${word}))`;
-    modifiedText = modifiedText.slice(0, index) + correctedText + modifiedText.slice(index + word.length);
-
-    // Update offset
-    offset += correctedText.length - incorrectText.length;
+  diff.forEach((part) => {
+    if (part.added) {
+      result += `(( ${part.value.trim()} )) `; // Added text
+    } else if (part.removed) {
+      result += `**${part.value.trim()}** `; // Removed or changed text
+    } else {
+      result += `${part.value} `; // Unchanged text
+    }
   });
-
-  return modifiedText;
+  return result.trim();
 }
 
 module.exports = {
