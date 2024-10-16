@@ -7,6 +7,8 @@ import Year from '../components/Main/Year';
 import Writing from '../components/Main/Writing';
 import Add from '../components/Sub/AddLang';
 import Corrections from '../components/Main/Corrections';
+import Corrected_writing from '../components/Sub/Corrected_writing';
+import Corrected_copy from '../components/Sub/Corrected_copy';
 
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
@@ -75,7 +77,8 @@ export default function Home() {
             <Writing/>
             <Add/>       
             <Corrections/>
-            
+            <Corrected_writing/>
+            <Corrected_copy/>
 
         </Box>
     );
