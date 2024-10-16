@@ -56,96 +56,44 @@ function Corrections(){
                 </Typography>
 
                 <Grid container justifyContent="center">
-                <Grid item xs={12}>
-                    <TextField
-                        fullWidth
-                        placeholder="Paste your writing here..."
-                        multiline
-                        rows={9}
-                        maxRows={100}
-                        textAlign={'center'}
-                        sx={{
-                            fontFamily: 'Poppins',
-                            fontSize: '2px',
-                            marginTop: 5,
-                            marginBottom: 4,
-                            background: 'white',
-                            borderRadius: '8px',
-                            border:'3.5px, solid, #4f51ee',
-                            boxShadow: '0px 0px 6px 0px #4f51ee',
-                            textAlign: 'center'
-                        }}
-                    />
-                    
-                    {/* <div>
-                    <Button
-                        sx={{
-                            height:45,
-                            width: 200,
-                            color: 'white',
-                            textTransform: 'none',
-                            background: '#1c1e9a',
-                            border:'2px, solid, white',
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                            borderRadius: 3,
-                            boxShadow: '1.5px 1.5px 5px 0px #1c1e9a',
-                        }}
-                    >
-                        Submit for Correction
-                    </Button>
-                    </div>
-
-                    <div>
-                    <Button
-                        sx={{
-                            height:45,
-                            width: 150,
-                            color: 'white',
-                            textTransform: 'none',
-                            background: '#4f50ed',
-                            border:'2px, solid, white',
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                            borderRadius: 3,
-                            boxShadow: '1.5px 1.5px 5px 0px #4f50ed'
-                        }}
-                    >
-                        Upload File 1
-                    </Button>
-                    <Button
-                        sx={{
-                            height:45,
-                            width: 150,
-                            color: 'white',
-                            textTransform: 'none',
-                            background: '#8e3aab',
-                            border:'2px, solid, white',
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                            borderRadius: 3,
-                            boxShadow: '1.5px 1.5px 5px 0px #8e3aab'
-                        }}
-                    >
-                        Upload File 2
-                    </Button>
-                    </div> */}
-
-</Grid>
-</Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            InputProps={{
+                                style: { fontSize: '18px', fontFamily:'poppins', padding:40 }
+                            }}
+                            fullWidth
+                            placeholder="Paste your writing here..."
+                            multiline
+                            rows={9}
+                            maxRows={100}
+                            textAlign={'center'}
+                            sx={{
+                                fontFamily: 'Poppins',
+                                marginTop: 5,
+                                marginBottom: 4,
+                                background: 'white',
+                                borderRadius: '8px',
+                                border:'3.5px, solid, #4f51ee',
+                                boxShadow: '0px 0px 12px 0px #4f51ee',
+                                textAlign: 'center'
+                            }}
+                        />
+                    </Grid>
+                </Grid>
 
                     <Box 
                         sx={{ 
                             display: 'flex',
-                            justifyContent:'right',
-                            alignItems: 'center',
-                            marginTop: '16px'
+                            justifyContent:'flex-end',
+                            alignItems: 'center',   
+                            gap:34
                         }}>
-                        
+                        <Box>
                             <Button
+                            
                                 sx={{
                                     height:45,
-                                    width: 200,
+                                    width: 230,
                                     color: 'white',
                                     textTransform: 'none',
                                     background: '#1c1e9a',
@@ -158,7 +106,8 @@ function Corrections(){
                             >
                                 Submit for Correction
                             </Button>
-                            
+                        </Box>     
+                        <Box>   
                             <Button
                                 sx={{
                                     height:45,
@@ -170,7 +119,8 @@ function Corrections(){
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     borderRadius: 3,
-                                    boxShadow: '1.5px 1.5px 5px 0px #4f50ed'
+                                    boxShadow: '1.5px 1.5px 5px 0px #4f50ed',
+                                    margin: 0.75
                                 }}
                             >
                                 Upload File 1
@@ -186,37 +136,19 @@ function Corrections(){
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     borderRadius: 3,
-                                    boxShadow: '1.5px 1.5px 5px 0px #8e3aab'
+                                    boxShadow: '1.5px 1.5px 5px 0px #8e3aab',
+                                    margin: 0.75
                                 }}
                             >
                                 Upload File 2
                             </Button>
-                        
+                        </Box>
                     </Box>
-
-                    <Box 
-                        sx={{ 
-                            flex: 1, 
-                            alignContent: 'right', 
-                            margin:2 //this one
-                        }}>
-                        
-                            
-                        
-                    </Box>
-
-
 
             </Box>
-
-                    
-        
-
-            
-
-
         </div>
     )
 }
+
 
 export default Corrections
