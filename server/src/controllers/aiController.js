@@ -1,59 +1,92 @@
 const axios = require('axios');
 const OpenAI = require('openai');
+const { diffWords } = require('diff'); // Import diff library
 require('dotenv').config();
-
-// Get the Sapling and OpenAI API keys from environment variables
-const saplingApiKey = process.env.SAPLING_API_KEY;
-const openaiApiKey = process.env.OPENAI_API_KEY;
-const saplingUrl = 'https://api.sapling.ai/api/v1/edits';
-const session_id = process.env.COOKIE_KEY;
 
 // Initialize OpenAI API client
 const openai = new OpenAI({
-  apiKey: openaiApiKey,
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 // Correct the text using Sapling AI and ChatGPT
 async function correctText(req, res) {
-  const { text } = req.body;
+  const { text, selectedWritingType } = req.body;
 
   try {
     // Step 1: Get edits from Sapling AI
-    const saplingResponse = await axios.post(saplingUrl, {
-      key: saplingApiKey,
-      session_id: session_id,
+    const saplingResponse = await axios.post('https://api.sapling.ai/api/v1/edits', {
+      key: process.env.SAPLING_API_KEY,
+      session_id: process.env.COOKIE_KEY,
       text,
     });
+
     const { data: saplingData } = saplingResponse;
 
     // Step 2: Apply Sapling edits
     let saplingCorrectedText = applySaplingEdits(text, saplingData.edits);
 
-    // // Step 3: Run post-processing with OpenAI to detect additional issues
-    // const correctionPrompt = `Please proofread the following text for any spelling, punctuation, and capitalization errors: ${saplingCorrectedText}`;
-    // const feedbackResponse = await openai.chat.completions.create({
-    //   model: "gpt-4",
-    //   messages: [{ role: "user", content: correctionPrompt }],
-    // });
+    // Step 3: Prepare the prompt based on writing type
+    let gptPrompt;
 
-    // const fullyCorrectedText = feedbackResponse.choices[0].message.content.trim();
+    if (selectedWritingType === null) {
+      // If no writing type is selected, just correct grammar and punctuation
+      gptPrompt = `You are a grammar and punctuation correction tool. Your task is to only correct missing spelling, capitalization, or punctuation issues in the given text without changing the provided corrections and giving the fully corrected version without formatting. You are a grammar correction tool.`;
+    } else {
+      // If a writing type is selected, tailor the corrections accordingly
+      gptPrompt = `You are a ${selectedWritingType} writing assistant. Correct any grammar, punctuation, or style issues in the following text while maintaining the intended writing style of a ${selectedWritingType}. Provide the fully corrected version without formatting.`;
+    }
 
-    // Step 5: Generate detailed feedback for students
-    const feedbackPrompt = `Based on the following Sapling AI edits and OpenAI corrections, provide a detailed explanation of the grammatical errors, spelling mistakes, and other issues. The original text is: "${text}". The Sapling corrections are: ${JSON.stringify(saplingData.edits)}. The final corrected text is: "${saplingCorrectedText}". Explain why each correction was necessary.`;
-    const detailedFeedbackResponse = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: [{ role: "user", content: feedbackPrompt }],
+    // Step 4: Call OpenAI for further corrections
+    const gptResponse = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: gptPrompt },
+        { role: 'user', content: saplingCorrectedText },
+      ],
+      max_tokens: 500,
+      temperature: 0.3,
     });
 
-    const detailedFeedback = detailedFeedbackResponse.choices[0].message.content;
+    const gptCorrectedText = gptResponse.choices[0].message.content;
 
-    // Step 6: Return the final result
+    // Step 5: Highlight the differences
+    const highlightedText = highlightChanges(text, gptCorrectedText);
+
+    // Step 6: Generate constructive feedback based on writing type
+    const feedbackResponse = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: `Provide constructive feedback on the changes made to the text according to the writing style of ${selectedWritingType}.` },
+        { role: 'user', content: highlightedText },
+      ],
+      max_tokens: 100,
+      temperature: 0.3,
+    });
+
+    const feedback = feedbackResponse.choices[0].message.content;
+
+    // Step 7: Generate positive aspects of the text based on writing type
+    const positiveFeedbackResponse = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [
+        { role: 'system', content: `Provide positive feedback on the text according to the writing style of ${selectedWritingType}.` },
+        { role: 'user', content: text },
+      ],
+      max_tokens: 100,
+      temperature: 0.3,
+    });
+
+    const positiveFeedback = positiveFeedbackResponse.choices[0].message.content;
+
+    // Step 8: Send response with results
     res.status(200).json({
+      selectedWritingType,
       originalText: text,
       saplingCorrectedText,
-      // fullyCorrectedText,
-      detailedFeedback,
-      saplingEdits: saplingData.edits,
+      gptCorrectedText,
+      highlightedText,
+      feedback,
+      positiveFeedback,
     });
   } catch (err) {
     console.error(err);
@@ -72,52 +105,31 @@ function applySaplingEdits(text, edits) {
     const adjustedEnd = sentence_start + end + offset;
     const incorrectText = modifiedText.slice(adjustedStart, adjustedEnd);
 
-    // Create the replacement with the desired formatting
     const correctedText = `**${incorrectText}** ((${replacement}))`;
-    modifiedText = modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
+    modifiedText =
+      modifiedText.slice(0, adjustedStart) + correctedText + modifiedText.slice(adjustedEnd);
 
-    // Update offset
     offset += correctedText.length - incorrectText.length;
   });
 
   return modifiedText;
 }
 
-// Helper function to merge Sapling and OpenAI corrections with formatting
-function mergeCorrectionsWithFormatting(originalText, fullyCorrectedText) {
-  let formattedText = originalText;
+// Highlight changes between original and corrected text
+function highlightChanges(original, corrected) {
+  const diff = diffWords(original, corrected); // Get word-level differences
+  let result = '';
 
-  const originalWords = originalText.split(/\b/);  // Split by word boundaries
-  const words = fullyCorrectedText.split(/\b/);      // Same split for OpenAI corrections
-
-  let formattedArray = [];
-  let originalIndex = 0;
-
-  // Loop through the OpenAI corrected words and compare them with the original
-  for (let i = 0; i < words.length; i++) {
-    const openaiWord = words[i].trim();
-    const originalWord = originalWords[originalIndex] ? originalWords[originalIndex].trim() : null;
-
-    // Case 1: Added punctuation or new words from OpenAI
-    if (openaiWord && !originalWord) {
-      formattedArray.push(`####${openaiWord}####`);
-    } 
-    // Case 2: OpenAI corrected word that differs from the original
-    else if (openaiWord && originalWord && openaiWord !== originalWord) {
-      formattedArray.push(`**${originalWord}** ((${openaiWord}))`);
-      originalIndex++;
-    } 
-    // Case 3: Words are the same, no correction
-    else if (openaiWord === originalWord) {
-      formattedArray.push(openaiWord);
-      originalIndex++;
+  diff.forEach((part) => {
+    if (part.added) {
+      result += `(( ${part.value.trim()} )) `; // Added text
+    } else if (part.removed) {
+      result += `**${part.value.trim()}** `; // Removed or changed text
+    } else {
+      result += `${part.value} `; // Unchanged text
     }
-  }
-
-  // Join the array back into a string
-  formattedText = formattedArray.join(' ');
-
-  return formattedText;
+  });
+  return result.trim();
 }
 
 module.exports = {
