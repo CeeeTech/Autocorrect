@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Box, TextField, Typography, Grid, Grid2 } from '@mui/material';
-import shadows from '@mui/material/styles/shadows';
+import { Button, Box, Typography, Stepper, Step, StepLabel, Grid } from '@mui/material';
 import Submit from '../components/Main/Submit';
 import English from '../components/Main/English';
 import Year from '../components/Main/Year';
@@ -10,76 +9,105 @@ import Corrections from '../components/Main/Corrections';
 import Corrected_writing from '../components/Sub/Corrected_writing';
 import Corrected_copy from '../components/Sub/Corrected_copy';
 
-export default function Home() {
-    const [selectedButton, setSelectedButton] = useState(null);
-    const [text, setText] = useState('Select your writing type and let our AI help you make it flawless.');
-    const [modifiedText, setModifiedText] = useState(''); // State to hold corrected text
-    const [story, setStory] = useState(''); // State to hold user input text
+const steps = [
+    'Submit',
+    'Select English Level',
+    'Select Year',
+    'Choose Writing Type',
+    'Add Languages',
+    'View Corrections',
+    'Corrected Writing',
+    'Corrected Copy',
+];
 
-    const handleButtonClick = (label) => {
-        setSelectedButton(label);
-        setText(label);
+export default function Home() {
+    const [activeStep, setActiveStep] = useState(0);
+
+    const handleNext = () => {
+        setActiveStep((prevStep) => prevStep + 1);
     };
 
-    const handleSubmit = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/api/ai/correct-text', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ text: story }), // Send user input text
-            });
+    const handleBack = () => {
+        setActiveStep((prevStep) => prevStep - 1);
+    };
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
-            const data = await response.json();
-            console.log(data);
-            setModifiedText(parseModifiedText(data.modifiedText)); // Update the corrected text state
-
-        } catch (error) {
-            console.error('Error fetching the corrected text:', error);
+    const renderStepContent = (stepIndex) => {
+        switch (stepIndex) {
+            case 0:
+                return <Submit />;
+            case 1:
+                return <English />;
+            case 2:
+                return <Year />;
+            case 3:
+                return <Writing />;
+            case 4:
+                return <Add />;
+            case 5:
+                return <Corrections />;
+            case 6:
+                return <Corrected_writing />;
+            case 7:
+                return <Corrected_copy />;
+            default:
+                return 'Unknown Step';
         }
     };
 
-    const parseModifiedText = (text) => {
-        // Replace **text** with <span style="color: red; text-decoration: line-through;">text</span> for red strikethrough
-        // Replace ((text)) with <span style="color: blue;">text</span> for blue text and remove the parentheses
-        return text
-            .replace(/\*\*(.*?)\*\*/g, '<span style="color: red; text-decoration: line-through;">$1</span>') // Red strikethrough text
-            .replace(/\(\((.*?)\)\)/g, '<span style="color: blue;">$1</span>') // Blue text without parentheses
-            .replace(/##(.*?)##/g, '<span style="color: purple;">$1</span>'); // Purple text without ##
-    };    
-
     return (
-
-        <Box sx={{ background: '#FAFAFA', padding: {} }}>
-            <Box 
-                fullWidth
-                sx={{
-                    padding:1.5,
-                    fontFamily: 'poppins',
-                    fontWeight:100,
-                    fontSize:'30px',
-                    textAlign:'center',
-                    color: 'black',
-                    textTransform: 'none',
-                }}
+        <Box sx={{ background: '#FAFAFA', padding: 3, minHeight: '100vh' }}>
+            <Typography
+                variant="h4"
+                align="center"
+                sx={{ fontFamily: 'Poppins', fontWeight: 100, mb: 3 }}
             >
                 Choose your options for corrections and customized feedback.
-            </Box>
-            
-            <Submit/>
-            <English/>
-            <Year/>
-            <Writing/>
-            <Add/>       
-            <Corrections/>
-            <Corrected_writing/>
-            <Corrected_copy/>
+            </Typography>
 
+            <Stepper activeStep={activeStep} alternativeLabel>
+                {steps.map((label, index) => (
+                    <Step key={index}>
+                        <StepLabel>{label}</StepLabel>
+                    </Step>
+                ))}
+            </Stepper>
+
+            <Box sx={{ mt: 5 }}>
+                {activeStep === steps.length ? (
+                    <Box textAlign="center">
+                        <Typography variant="h6" gutterBottom>
+                            All steps completed – you’re finished!
+                        </Typography>
+                        <Button onClick={handleReset} variant="contained" sx={{ mt: 2 }}>
+                            Reset
+                        </Button>
+                    </Box>
+                ) : (
+                    <Grid container direction="column" alignItems="center" spacing={2}>
+                        <Grid item>{renderStepContent(activeStep)}</Grid>
+                        <Grid item>
+                            <Button
+                                disabled={activeStep === 0}
+                                onClick={handleBack}
+                                sx={{ mr: 1 }}
+                            >
+                                Back
+                            </Button>
+                            <Button
+                                onClick={handleNext}
+                                variant="contained"
+                                color="primary"
+                            >
+                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                            </Button>
+                        </Grid>
+                    </Grid>
+                )}
+            </Box>
         </Box>
     );
 }
