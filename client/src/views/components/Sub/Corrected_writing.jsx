@@ -3,7 +3,7 @@ import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import Feedback from './Feedback';
 import Positives from './Positives';
 
-function Corrected_writing(){
+function Corrected_writing({correctedText}){
     
     const buttonLista = [
         { label: 'Download PDF', background:'#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a'  },
@@ -76,6 +76,7 @@ function Corrected_writing(){
                         minHeight: '800px'
                     }}>
                     {/* corrected text */}
+                        {correctedText}
                     </Box>
                     <div>
                     <hr style={{ border: '2px solid #000', width: '20%', margin: '20px auto' }} />

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
-function Corrected_copy(){
+function Corrected_copy({correctedCopy}){
     
     const buttonLista = [
         { label: 'Download PDF', background:'#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a'  },
@@ -63,7 +63,7 @@ function Corrected_copy(){
                     boxShadow: '0px 0px 12px 0px #1c8b9a',
                     textAlign: 'center'
                 }}
-                >   
+                >   {correctedCopy}
                 </Box>
 
                 <Box 

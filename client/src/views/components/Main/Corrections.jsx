@@ -1,9 +1,43 @@
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 import Corrected_writing from '../Sub/Corrected_writing';
 import Corrected_copy from '../Sub/Corrected_copy';
 
 function Corrections(){
+
+    const [correctedText, setCorrectedText] = useState("");
+    const [correctedCopy, setCorrectedCopy] = useState("");
+    const [story, setStory] = useState("");
+    const [correcting, setCorrecting] = useState(true);
+
+    const handleSubmit = async (selectedButton) => {
+        setCorrecting(true); // Start correcting
+        try {
+            const response = await fetch('http://localhost:5000/api/ai/correct-text', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: story, selectedWritingType: selectedButton }),
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            setCorrectedText(parseModifiedText(data.highlightedText));
+            setCorrectedCopy(parseModifiedText(data.hybridCorrectedText));
+        } catch (error) {
+            console.error('Error fetching the corrected text:', error);
+        } finally {
+            setCorrecting(false); // Stop correcting
+        }
+    };
+
+    const parseModifiedText = (text) => {
+        return text
+            .replace(/\*\*(.*?)\*\*/g, '<span style="color: red; text-decoration: line-through;">$1</span>')
+            .replace(/\(\((.*?)\)\)/g, '<span style="color: blue;">$1</span>')
+            .replace(/##(.*?)##/g, '<span style="color: purple;">$1</span>');
+    };
+
     return(
         <div>
             <Box 
@@ -91,7 +125,7 @@ function Corrections(){
                     }}>
                     <Box>
                         <Button
-                        
+                            onClick={handleSubmit}
                             sx={{
                                 height:45,
                                 width: 230,
@@ -145,8 +179,13 @@ function Corrections(){
                         </Button>
                     </Box>
                 </Box>
-                <Corrected_writing />
-                <Corrected_copy />
+                {/* if correcting false */}
+                {!correcting && (
+                    <>
+                        <Corrected_writing correctedText={correctedText} />
+                        <Corrected_copy correctedCopy={correctedCopy} />
+                    </>
+                )}
             </Box>
         </div>
     )
