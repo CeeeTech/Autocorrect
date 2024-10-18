@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Box, TextField, Typography, Skeleton } from '@mui/material';
+import { Button, Box, TextField, Typography, Skeleton, Divider } from '@mui/material';
 import { jsPDF } from 'jspdf'; 
 import html2canvas from 'html2canvas';
 
@@ -7,6 +7,8 @@ export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
     const [text, setText] = useState('Select your writing type and let our AI help you make it flawless.');
     const [modifiedText, setModifiedText] = useState('');
+    const [finalCorrectedText, setFinalCorrectedText] = useState('');
+    const [feedback, setFeedback] = useState('');
     const [story, setStory] = useState('');
     const [loading, setLoading] = useState(false); // New loading state
 
@@ -27,6 +29,8 @@ export default function Home() {
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             setModifiedText(parseModifiedText(data.highlightedText));
+            setFinalCorrectedText(parseModifiedText(data.hybridCorrectedText));
+            setFeedback(parseFeedback(data.feedback, data.positiveFeedback));
         } catch (error) {
             console.error('Error fetching the corrected text:', error);
         } finally {
@@ -85,6 +89,11 @@ export default function Home() {
             .replace(/\(\((.*?)\)\)/g, '<span style="color: blue;">$1</span>')
             .replace(/##(.*?)##/g, '<span style="color: purple;">$1</span>');
     };
+
+    // make 2 paragraphs for feedback and positiveFeedback
+    const parseFeedback = (text1, text2) => {
+        return text1 + '.<br><br>' + text2 + '.';
+    }
 
     return (
         <Box sx={{ background: '#FAFAFA', padding: 2 }}>
@@ -183,6 +192,38 @@ export default function Home() {
                         </Box>
                     </Box>
                 </Box>
+
+                {/* full width divider */}
+                <Divider sx={{ mt: 2 }} />
+
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 2 }}>
+                    <Box sx={{ flex: 1 }}>
+                        <Typography align="center" mb={1} sx={{ fontWeight: 'bold' }}>Final Corrected Copy</Typography>
+                        {loading ? (
+                            <Skeleton variant="rectangular" width="100%" height={150} />
+                        ) : (
+                            <Box
+                                id="correctedTextContainer"
+                                sx={{ background: '#fee5ea', padding: 2, minHeight: '150px', borderRadius: '5px' }}
+                                dangerouslySetInnerHTML={{ __html: finalCorrectedText }}
+                            />
+                        )}
+                    </Box>
+
+                    <Box sx={{ flex: 1 }}>
+                        <Typography align="center" mb={1} sx={{ fontWeight: 'bold' }}>Feedback</Typography>
+                        {loading ? (
+                            <Skeleton variant="rectangular" width="100%" height={150} />
+                        ) : (
+                            <Box
+                                id="correctedTextContainer"
+                                sx={{ background: '#fee5ea', padding: 2, minHeight: '150px', borderRadius: '5px' }}
+                                dangerouslySetInnerHTML={{ __html: feedback }}
+                            />
+                        )}
+                    </Box>
+                </Box>
+
             </Box>
         </Box>
     );

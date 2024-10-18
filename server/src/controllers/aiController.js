@@ -47,10 +47,10 @@ async function correctText(req, res) {
       temperature: 0.3,
     });
 
-    const gptCorrectedText = gptResponse.choices[0].message.content;
+    const hybridCorrectedText = gptResponse.choices[0].message.content;
 
     // Step 5: Highlight the differences
-    const highlightedText = highlightChanges(text, gptCorrectedText);
+    const highlightedText = highlightChanges(text, hybridCorrectedText);
 
     // Step 6: Generate constructive feedback based on writing type
     const feedbackResponse = await openai.chat.completions.create({
@@ -83,7 +83,7 @@ async function correctText(req, res) {
       selectedWritingType,
       originalText: text,
       saplingCorrectedText,
-      gptCorrectedText,
+      hybridCorrectedText,
       highlightedText,
       feedback,
       positiveFeedback,
