@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Box, TextField, Typography } from '@mui/material';
-import { jsPDF } from 'jspdf'; // Import jsPDF
-import html2canvas from 'html2canvas'; // Import html2canvas
+import { Button, Box, TextField, Typography, Skeleton } from '@mui/material';
+import { jsPDF } from 'jspdf'; 
+import html2canvas from 'html2canvas';
 
 export default function Home() {
     const [selectedButton, setSelectedButton] = useState(null);
     const [text, setText] = useState('Select your writing type and let our AI help you make it flawless.');
     const [modifiedText, setModifiedText] = useState('');
     const [story, setStory] = useState('');
+    const [loading, setLoading] = useState(false); // New loading state
 
     const handleButtonClick = (label) => {
         setSelectedButton(label);
@@ -15,6 +16,7 @@ export default function Home() {
     };
 
     const handleSubmit = async (selectedButton) => {
+        setLoading(true); // Start loading
         try {
             const response = await fetch('http://localhost:5000/api/ai/correct-text', {
                 method: 'POST',
@@ -27,12 +29,14 @@ export default function Home() {
             setModifiedText(parseModifiedText(data.highlightedText));
         } catch (error) {
             console.error('Error fetching the corrected text:', error);
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
     const handleCopyText = () => {
         const container = document.createElement('div');
-        container.innerHTML = modifiedText; // Set the HTML content to copy
+        container.innerHTML = modifiedText;
         document.body.appendChild(container);
         const range = document.createRange();
         range.selectNodeContents(container);
@@ -46,8 +50,8 @@ export default function Home() {
         } catch (err) {
             console.error('Failed to copy text: ', err);
         } finally {
-            document.body.removeChild(container); // Clean up
-            selection.removeAllRanges(); // Clear selection
+            document.body.removeChild(container);
+            selection.removeAllRanges();
         }
     };
 
@@ -55,7 +59,7 @@ export default function Home() {
         const doc = new jsPDF();
         html2canvas(document.querySelector("#correctedTextContainer")).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 190; // You can set your desired width here
+            const imgWidth = 190;
             const pageHeight = doc.internal.pageSize.height;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             let heightLeft = imgHeight;
@@ -98,7 +102,6 @@ export default function Home() {
                     fontFamily: 'Poppins, sans-serif',
                 }}
             >
-                {/* Buttons */}
                 <Box
                     sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1, width: '100%', mb: 2 }}
                 >
@@ -153,7 +156,7 @@ export default function Home() {
                             }}
                         />
                         <Button
-                            onClick={() => handleSubmit(selectedButton)} 
+                            onClick={() => handleSubmit(selectedButton)}
                             sx={{
                                 mt: 2, background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
                                 color: 'white', textTransform: 'none', borderRadius: 10
@@ -165,11 +168,15 @@ export default function Home() {
 
                     <Box sx={{ flex: 1 }}>
                         <Typography align="center" mb={1} sx={{ fontWeight: 'bold' }}>AI-Generated Corrections</Typography>
-                        <Box
-                            id="correctedTextContainer" // Added id for html2canvas targeting
-                            sx={{ background: '#fee5ea', padding: 2, minHeight: '150px', borderRadius: '5px' }}
-                            dangerouslySetInnerHTML={{ __html: modifiedText }}
-                        />
+                        {loading ? (
+                            <Skeleton variant="rectangular" width="100%" height={150} />
+                        ) : (
+                            <Box
+                                id="correctedTextContainer"
+                                sx={{ background: '#fee5ea', padding: 2, minHeight: '150px', borderRadius: '5px' }}
+                                dangerouslySetInnerHTML={{ __html: modifiedText }}
+                            />
+                        )}
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
                             <Button onClick={handleSaveAsPDF} sx={{ mr: 1 }}>Save as PDF</Button>
                             <Button onClick={handleCopyText}>Copy Text</Button>
