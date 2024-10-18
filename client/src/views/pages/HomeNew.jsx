@@ -1,23 +1,19 @@
 import React, { useState } from 'react';
 import { Button, Box, Typography, Stepper, Step, StepLabel, Grid } from '@mui/material';
-import Submit from '../components/Main/Submit';
+import Submit from '../components/Main/endUser';
 import English from '../components/Main/English';
 import Year from '../components/Main/Year';
 import Writing from '../components/Main/Writing';
-import Add from '../components/Sub/AddLang';
+import Add from '../components/Main/AddLang';
 import Corrections from '../components/Main/Corrections';
-import Corrected_writing from '../components/Sub/Corrected_writing';
-import Corrected_copy from '../components/Sub/Corrected_copy';
 
 const steps = [
-    'Submit',
-    'Select English Level',
-    'Select Year',
-    'Choose Writing Type',
-    'Add Languages',
-    'View Corrections',
-    'Corrected Writing',
-    'Corrected Copy',
+    'Who is Submiting',
+    'English Varient',
+    'School Year',
+    'Writing Type',
+    'Additional Languages',
+    'Corrections',
 ];
 
 export default function Home() {
@@ -49,10 +45,6 @@ export default function Home() {
                 return <Add />;
             case 5:
                 return <Corrections />;
-            case 6:
-                return <Corrected_writing />;
-            case 7:
-                return <Corrected_copy />;
             default:
                 return 'Unknown Step';
         }

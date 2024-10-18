@@ -1,5 +1,7 @@
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import Corrected_writing from '../Sub/Corrected_writing';
+import Corrected_copy from '../Sub/Corrected_copy';
 
 function Corrections(){
     return(
@@ -80,71 +82,71 @@ function Corrections(){
                         />
                     </Grid>
                 </Grid>
-
-                    <Box 
-                        sx={{ 
-                            display: 'flex',
-                            justifyContent:'flex-end',
-                            alignItems: 'center',   
-                            gap:34
-                        }}>
-                        <Box>
-                            <Button
-                            
-                                sx={{
-                                    height:45,
-                                    width: 230,
-                                    color: 'white',
-                                    textTransform: 'none',
-                                    background: '#1c1e9a',
-                                    border:'2px, solid, white',
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    borderRadius: 3,
-                                    boxShadow: '1.5px 1.5px 5px 0px #1c1e9a',
-                                }}
-                            >
-                                Submit for Correction
-                            </Button>
-                        </Box>     
-                        <Box>   
-                            <Button
-                                sx={{
-                                    height:45,
-                                    width: 150,
-                                    color: 'white',
-                                    textTransform: 'none',
-                                    background: '#4f50ed',
-                                    border:'2px, solid, white',
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    borderRadius: 3,
-                                    boxShadow: '1.5px 1.5px 5px 0px #4f50ed',
-                                    margin: 0.75
-                                }}
-                            >
-                                Upload File 1
-                            </Button>
-                            <Button
-                                sx={{
-                                    height:45,
-                                    width: 150,
-                                    color: 'white',
-                                    textTransform: 'none',
-                                    background: '#8e3aab',
-                                    border:'2px, solid, white',
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14,
-                                    borderRadius: 3,
-                                    boxShadow: '1.5px 1.5px 5px 0px #8e3aab',
-                                    margin: 0.75
-                                }}
-                            >
-                                Upload File 2
-                            </Button>
-                        </Box>
+                <Box 
+                    sx={{ 
+                        display: 'flex',
+                        justifyContent:'flex-end',
+                        alignItems: 'center',   
+                        gap:34
+                    }}>
+                    <Box>
+                        <Button
+                        
+                            sx={{
+                                height:45,
+                                width: 230,
+                                color: 'white',
+                                textTransform: 'none',
+                                background: '#1c1e9a',
+                                border:'2px, solid, white',
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                borderRadius: 3,
+                                boxShadow: '1.5px 1.5px 5px 0px #1c1e9a',
+                            }}
+                        >
+                            Submit for Correction
+                        </Button>
+                    </Box>     
+                    <Box>   
+                        <Button
+                            sx={{
+                                height:45,
+                                width: 150,
+                                color: 'white',
+                                textTransform: 'none',
+                                background: '#4f50ed',
+                                border:'2px, solid, white',
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                borderRadius: 3,
+                                boxShadow: '1.5px 1.5px 5px 0px #4f50ed',
+                                margin: 0.75
+                            }}
+                        >
+                            Upload File 1
+                        </Button>
+                        <Button
+                            sx={{
+                                height:45,
+                                width: 150,
+                                color: 'white',
+                                textTransform: 'none',
+                                background: '#8e3aab',
+                                border:'2px, solid, white',
+                                fontFamily: 'Poppins',
+                                fontSize: 14,
+                                borderRadius: 3,
+                                boxShadow: '1.5px 1.5px 5px 0px #8e3aab',
+                                margin: 0.75
+                            }}
+                        >
+                            Upload File 2
+                        </Button>
                     </Box>
-
+                </Box>
+                <Corrected_writing />
+                <Corrected_copy />
             </Box>
         </div>
     )
