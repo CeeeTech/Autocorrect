@@ -103,6 +103,7 @@ function Corrections(){
                             rows={9}
                             maxRows={100}
                             textAlign={'center'}
+                            value={story}
                             sx={{
                                 fontFamily: 'Poppins',
                                 marginTop: 5,
