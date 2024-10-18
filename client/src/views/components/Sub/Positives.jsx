@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
-function Positives(){
+function Positives({positiveText}){
     return(
         <div>
             <Box
@@ -9,21 +9,19 @@ function Positives(){
                 fontFamily: 'Poppins',
                 color:'black',
             }}>
-            <h4>Positive Aspects</h4>
+            <h5>Positive Aspects</h5>
             </Box>
             <Box
             sx={{
                 fontFamily: 'sans-serif',
                 color:'black',
-                fontWeight: '700',
-                fontSize:22,
+                fontWeight: '200',
+                fontSize:18,
                 textAlign: 'left',
-                paddingLeft: '120px',
-                minHeight: '180px'
+                padding: '0px 10%',
+                lineHeight: '2'
             }}>
-            <p>
-                Interesting Storyline:
-            </p>
+            {positiveText}
             </Box>
  
         </div>

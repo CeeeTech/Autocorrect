@@ -1,7 +1,9 @@
 import React from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 function Corrected_copy({correctedCopy}){
+    const [modifiedText, setModifiedText] = useState("");
     
     const buttonLista = [
         { label: 'Download PDF', background:'#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a'  },
@@ -10,60 +12,74 @@ function Corrected_copy({correctedCopy}){
         { label: 'Share PDF', background:'#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
     ];
 
+    useEffect(() => {
+        setModifiedText(parseModifiedText(correctedCopy))
+    } , [correctedCopy])
+
+    const parseModifiedText = (text) => {
+        return text
+            .replace(/\*\*(.*?)\*\*/g, '<span style="color: red; text-decoration: line-through;">$1</span>')
+            .replace(/\(\((.*?)\)\)/g, '<span style="color: blue;">$1</span>')
+            .replace(/##(.*?)##/g, '<span style="color: purple;">$1</span>');
+    };
+    
     return(
-        <div>
+        <>
             <Box 
                 fullWidth
                 sx={{
                     height: 'auto',
-                    padding:6,
+                    py: 5,
                     fontFamily: 'sans-serif: Arial',
-                    fontSize:'35px',
-                    fontWeight: 900,
+                    fontSize:'18px',
+                    fontWeight: 500,
                     textAlign: 'center',
                     color: '#4f51ee',
                     textTransform: 'none',
-                    background: '#f7f7f7',
+                    lineHeight: '2',    
                 }}
             >
                 <Typography variant="p"> 
-                <style>
-                @import url('https://fonts.googleapis.com/css2?family=Galada&display=swap');
-                </style>
+                    <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Galada&display=swap');
+                    </style>
 
-                <span style={{ fontFamily: 'Galada', fontSize: '38px'  }}>
-                    {'Corrected '}  
-                </span> 
-                 Copy
+                    <span style={{ fontFamily: 'Galada', fontSize: '38px'  }}>
+                        {'Corrected '}  
+                    </span> 
+                    Copy
                 </Typography>
 
                 <Typography
                     align={'center'}
                     sx={{
                         fontFamily: 'Poppins',
-                        fontSize: '20px',
-                        color:'black',
-                        marginTop: 1
+                        fontSize: '16px',
+                        color: 'black',
+                        marginTop: 1,
+                        padding: '0px 10%',
                     }}
                 >
                     You can make edits if neccessary. The corrected copy can be downloaded as PDF or Word files.
-                    <br/> They can also be shared in those file formats, for example via email.
+                    They can also be shared in those file formats, for example via email.
                 </Typography>
 
 
                 <Box
                 sx={{
-                    height: 800,
+                    height: 'auto',
                     fontFamily: 'Poppins',
-                    marginTop: 5,
-                    marginBottom: 4,
+                    mt: 5,
+                    mb: 4,
+                    py: 5,
+                    px: 5,
                     background: 'white',
                     borderRadius: '8px',
                     border:'3.5px, solid, #1c8b9a',
                     boxShadow: '0px 0px 12px 0px #1c8b9a',
                     textAlign: 'center'
                 }}
-                >   {correctedCopy}
+                >   {modifiedText}
                 </Box>
 
                 <Box 
@@ -96,13 +112,7 @@ function Corrected_copy({correctedCopy}){
                         ))}
                 </Box>
             </Box>   
-                    
-        
-
-            
-
-
-        </div>
+        </>
     )
 }
 

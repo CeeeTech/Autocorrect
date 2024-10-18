@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
-function Feedback(){
+function Feedback({feedbackText}){
+
     return(
         <div>
             <Box
@@ -9,37 +10,20 @@ function Feedback(){
                 fontFamily: 'Poppins',
                 color:'black',
             }}>
-            <h4>Constructive Feedback</h4>
+            <h5>Constructive Feedback</h5>
             </Box>
             <Box
             sx={{
                 fontFamily: 'sans-serif',
                 color:'black',
-                fontWeight: '700',
-                fontSize:22,
+                fontWeight: '200',
+                fontSize:18,
                 textAlign: 'left',
-                paddingLeft: '120px',
-                minHeight: '180px'
+                padding: '0px 10%',
+                lineHeight: '2'
             }}>
-            <p>
-                Exposition:
-            </p>
+            {feedbackText}
             </Box>
-            <Box
-            sx={{
-                fontFamily: 'sans-serif',
-                color:'black',
-                fontWeight: '700',
-                fontSize:22,
-                textAlign: 'left',
-                paddingLeft: '120px',
-                minHeight: '180px'
-            }}>
-            <p>
-                Inciting Incident:
-            </p>
-            </Box>
-
         </div>
     )
 }
