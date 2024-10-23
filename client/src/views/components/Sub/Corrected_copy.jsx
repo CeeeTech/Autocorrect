@@ -77,7 +77,7 @@ function Corrected_copy({correctedCopy}){
                     borderRadius: '8px',
                     border:'3.5px, solid, #1c8b9a',
                     boxShadow: '0px 0px 12px 0px #1c8b9a',
-                    textAlign: 'center'
+                    textAlign: 'left'
                 }}
                 >   {modifiedText}
                 </Box>

@@ -51,7 +51,7 @@ export default function Home() {
     };
 
     return (
-        <Box sx={{ background: '#FAFAFA', padding: 3, minHeight: '100vh' }}>
+        <Box sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
             <Typography
                 variant="h4"
                 align="center"
