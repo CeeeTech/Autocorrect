@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import ReplyIcon from '@mui/icons-material/Reply';
 
 function Corrected_copy({correctedCopy}){
     const [modifiedText, setModifiedText] = useState("");
@@ -37,8 +38,10 @@ function Corrected_copy({correctedCopy}){
                     color: '#4f51ee',
                     textTransform: 'none',
                     lineHeight: '2',    
+                    mx: '5%',
                 }}
             >
+
                 <Typography variant="p"> 
                     <style>
                     @import url('https://fonts.googleapis.com/css2?family=Galada&display=swap');
@@ -63,7 +66,22 @@ function Corrected_copy({correctedCopy}){
                     You can make edits if neccessary. The corrected copy can be downloaded as PDF or Word files.
                     They can also be shared in those file formats, for example via email.
                 </Typography>
-
+                            
+                <Box
+                    sx={{
+                        display: 'block', // Makes sure the icon takes a full line
+                        textAlign: 'center', // Center the icon if needed
+                        mt: 0, // Add some margin for spacing
+                    }}
+                >
+                    <ReplyIcon
+                        sx={{
+                            fontSize: 40,
+                            color: '#009e60',
+                            transform: 'rotate(250deg) scaleY(-1)',
+                        }}
+                    />
+                </Box>
 
                 <Box
                 sx={{

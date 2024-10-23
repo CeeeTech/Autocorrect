@@ -26,7 +26,7 @@ function Writing() {
                     textAlign: 'center',
                     color: '#4f51ee',
                     textTransform: 'none',
-                    background: 'white',
+                    background: '#f7f7f7',
                 }}
             >
                 <Typography variant="h4" fontWeight='1000'>
