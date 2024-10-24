@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React from "react";
 
-function Year(){
+function Year({onYearChange}){
 
     const buttonList3a = [
         { label: 'Year 1', background:'#4f51ee', color: 'white'  },
@@ -70,9 +70,9 @@ function Year(){
                         <Box>
                         {buttonList3a.map((item, index) => (
                             <Button
+                                onClick={() => onYearChange(item.label)}
                                 key={index}
                                 fullWidth
-                                //onClick={() => handleButtonClick(item.label)}
                                 sx={{
                                     flexBasis: { xs: '100%', sm: '45%', md: '18%' },
                                     height:55,
@@ -96,6 +96,7 @@ function Year(){
                         <Box>
                         {buttonList3b.map((item, index) => (
                             <Button
+                                onClick={() => onYearChange(item.label)}
                                 key={index}
                                 fullWidth
                                 //onClick={() => handleButtonClick(item.label)}
@@ -122,6 +123,7 @@ function Year(){
                         <Box>
                         {buttonList3c.map((item, index) => (
                             <Button
+                                onClick={() => onYearChange(item.label)}
                                 key={index}
                                 fullWidth
                                 //onClick={() => handleButtonClick(item.label)}
