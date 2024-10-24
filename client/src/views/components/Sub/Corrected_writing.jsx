@@ -55,7 +55,7 @@ function Corrected_writing(){
 
                 <Box
                 sx={{
-                    height: 2000,
+                    height: 'auto',
                     fontFamily: 'Poppins',
                     marginTop: 5,
                     marginBottom: 4,
@@ -63,7 +63,8 @@ function Corrected_writing(){
                     borderRadius: '8px',
                     border:'3.5px, solid, #1c8b9a',
                     boxShadow: '0px 0px 12px 0px #1c8b9a',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    paddingBottom: 20
                 }}
                 >   
                     <Box
