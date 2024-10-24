@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 
-function Writing(){
+function Writing({onWritingChange}){
 
     const buttonLista = [
         { label: 'Narrative Writing (stories)', background:'#4f51ee', color: 'white'  },
@@ -63,6 +63,7 @@ function Writing(){
                         <Box>
                         {buttonLista.map((item, index) => (
                             <Button
+                                onClick={() => onWritingChange(item.label)}
                                 key={index}
                                 fullWidth
                                 //onClick={() => handleButtonClick(item.label)}
@@ -89,9 +90,9 @@ function Writing(){
                         <Box>
                         {buttonListb.map((item, index) => (
                             <Button
+                                onClick={() => onWritingChange(item.label)}
                                 key={index}
                                 fullWidth
-                                //onClick={() => handleButtonClick(item.label)}
                                 sx={{
                                     flexBasis: { xs: '100%', sm: '45%', md: '18%' },
                                     height:85,
