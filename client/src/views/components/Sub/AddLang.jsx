@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 
-function AddLang(){
+function AddLang({onAddChange}){
 
     const buttonLista = [
         { label: 'Chinese', background:'#4f51ee', color: 'white'  },
@@ -65,9 +65,9 @@ function AddLang(){
                         <Box>
                         {buttonLista.map((item, index) => (
                             <Button
+                                onClick={() => onAddChange(item.label)}
                                 key={index}
                                 fullWidth
-                                //onClick={() => handleButtonClick(item.label)}
                                 sx={{
                                     flexBasis: { xs: '100%', sm: '45%', md: '18%' },
                                     height:45,
@@ -91,9 +91,9 @@ function AddLang(){
                         <Box>
                         {buttonListb.map((item, index) => (
                             <Button
+                                onClick={() => onAddChange(item.label)}
                                 key={index}
                                 fullWidth
-                                //onClick={() => handleButtonClick(item.label)}
                                 sx={{
                                     flexBasis: { xs: '100%', sm: '45%', md: '18%' },
                                     height:45,
