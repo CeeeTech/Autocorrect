@@ -1,252 +1,76 @@
-import { Button, Box, Grid, TextField, Typography } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 
-export default function Home() {
+export default function LandingPage() {
     return (
-        <div>
-            <Box sx={{
-                background:'#FAFAFA '
-            }}>
-            <Grid
-                container
-                justifyContent="center"
-                xs={12}
-                md={10}
-                lg={7}
+        <Box
+            sx={{
+                minHeight: '100vh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                backgroundColor: '#f4f4f9', // Soft light gray background
+                padding: 3,
+                textAlign: 'center',
+                color: '#333', // Dark gray for text
+            }}
+        >
+            <Box
                 sx={{
-                    background:'#f4f4f6',
-                    margin:'auto',
-                    padding:5
+                    maxWidth: '700px',
+                    backgroundColor: '#ffffff', // Pure white content box
+                    borderRadius: 4,
+                    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.05)', // Light shadow for subtle effect
+                    padding: 5,
+                    transition: 'transform 0.3s ease-in-out',
+                    '&:hover': {
+                        transform: 'scale(1.02)',
+                    },
                 }}
             >
-                <Typography mt={3}>
-                    Select your writing type and let our Al help you make it flawless.
+                <Typography variant="h2" gutterBottom sx={{ color: '#2c3e50' }}> 
+                    Welcome to Autocorrector
                 </Typography>
-                <Grid 
-                    container
-                    mt={3}
-                    padding={2}
-                    borderRadius={2}
+                <Typography variant="body1" color="textSecondary" paragraph sx={{ color: '#4f4f4f' }}>
+                    Your go-to solution for flawless writing! Upload your documents and get instant corrections to improve grammar, style, and clarity.
+                </Typography>
+
+                <Box sx={{ margin: '30px 0' }}>
+                    <Typography variant="h5" gutterBottom sx={{ color: '#2c3e50' }}>
+                        Key Features:
+                    </Typography>
+                    <Typography variant="body1" paragraph sx={{ color: '#4f4f4f' }}>
+                        - AI-powered grammar and style corrections<br />
+                        - Instant feedback to improve your writing<br />
+                        - Supports various document formats (PDF, Word)<br />
+                        - Easy and user-friendly interface
+                    </Typography>
+                </Box>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    onClick={() => window.location.href = '/new-page'}
                     sx={{
-                        background: 'white',
+                        padding: '10px 30px',
+                        fontSize: '18px',
+                        backgroundColor: '#008080', // Teal as a primary accent color
+                        '&:hover': {
+                            backgroundColor: '#006666', // Darker teal on hover
+                        },
                     }}
                 >
-                    <Grid 
-                        container 
-                        mt={2}
-                        justifyContent="center"
-                        alignItems="stretch" 
-                        direction={'row'}
-                    >
-                        <Grid 
-                            item 
-                            lg={3}
-                            md={6}
-                            xs={12} 
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: { xs: 2, sm: 3 },
-                            }}
-                        >
-                            <Button 
-                                item
-                                fullWidth
-                                sx={{
-                                    margin: 1,
-                                    fontSize:'15px',
-                                    borderRadius: 8,
-                                    color: 'white',
-                                    height: '100%',
-                                    textTransform: 'none',
-                                    background: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)',
-                                }}
-                            >
-                                Persuasive Essay Writing
-                            </Button>
-                        </Grid>
-                        <Grid 
-                            item 
-                            lg={3}
-                            md={6}
-                            xs={12} 
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: { xs: 2, sm: 3 },
-                            }}
-                        >
-                            <Button 
-                                fullWidth
-                                sx={{
-                                    margin: 1,
-                                    fontSize:'15px',
-                                    borderRadius: 8,
-                                    color: 'white',
-                                    height: '100%',
-                                    textTransform: 'none',
-                                    background: 'linear-gradient(90deg, #f056a6 20%, #fe7dc2 90%)',
-                                }}
-                            >
-                                Text Response Essays
-                            </Button>
-                        </Grid>
-                        <Grid 
-                            item 
-                            lg={3}
-                            md={6}
-                            xs={12}
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: { xs: 2, sm: 3 },
-                            }}
-                        >
-                            <Button 
-                                fullWidth
-                                sx={{
-                                    marginTop:3,
-                                    fontSize:'15px',
-                                    margin: 1,
-                                    borderRadius: 8,
-                                    color: 'white',
-                                    height: '100%',
-                                    textTransform: 'none',
-                                    background: 'linear-gradient(90deg, #fda301 20%, #fdd402 90%)',
-                                }}
-                            >
-                                Narrative Writing
-                            </Button>
-                        </Grid>
-                        <Grid 
-                            item 
-                            lg={3}
-                            md={6}
-                            xs={12} 
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: { xs: 2, sm: 3 },
-                            }}
-                        >
-                            <Button 
-                                fullWidth
-                                sx={{
-                                    margin: 1,
-                                    borderRadius: 8,
-                                    color: 'white',
-                                    fontSize:'15px',
-                                    height: '100%',
-                                    textTransform: 'none',
-                                    background: 'linear-gradient(90deg, #3e72f0 20%, #44cdff 90%)',
-                                }}
-                            >
-                                Language Analysis
-                            </Button>
-                        </Grid>
-                    </Grid>
-
-                    <Grid container xs={12} mt={1}>
-                        <Button 
-                                fullWidth
-                                sx={{
-                                    padding:1.5,
-                                    margin: 2,
-                                    fontSize:'15px',
-                                    borderRadius: 10,
-                                    color: 'white',
-                                    textTransform: 'none',
-                                    background: 'linear-gradient(90deg, #4F51EE 10%, #4F51EE 10%, #04D2BB 90%)',
-                                }}
-                            >
-                                Letter Writing
-                        </Button>                
-                    </Grid>
-                    <Typography>
-                        Your Story
-                    </Typography>
-                    <TextField
-                        multiline
-                        minRows={8}
-                        fullWidth
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: '#1cd1fb', 
-                                    borderWidth: '3px',
-                                    borderRadius:3,
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: '#1cd1fb',
-                                    borderWidth: '3px',
-                                    borderRadius:3,
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: '#1cd1fb', 
-                                    borderWidth: '3px',
-                                    borderRadius:3,
-                                },
-                            },
-                            background:'#f4f4f6'
-                        }}
-                    />
-                    <Grid 
-                        container
-                        mt={4}
-                        justifyContent= {'center'}
-                        alignItems= {'center'}
-                    >
-                        <Button
-                            sx={{
-                                padding:1.5,
-                                margin: 2,
-                                fontSize:'15px',
-                                paddingLeft:8,
-                                paddingRight:8,
-                                borderRadius: 10,
-                                color: 'white',
-                                textTransform:'none',
-                                background: 'linear-gradient(90deg, #2c65f2 20%, #a865fd 90%)',
-                            }}
-                        >
-                            Submit For Correction
-                        </Button>
-                    </Grid>
-                    <Typography mt={3}>
-                        AI-Generated Corrections
-                    </Typography>
-                    <TextField
-                        multiline
-                        minRows={8}
-                        fullWidth
-                        sx={{
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: '#d23e69',
-                                    borderWidth: '3px',
-                                    borderRadius:3,
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: '#d23e69', 
-                                    borderWidth: '3px',
-                                    borderRadius:3,
-                                },
-                                '&.Mui-focused fieldset': {
-                                    borderColor: '#d23e69', 
-                                    borderWidth: '3px',
-                                    borderRadius:3,
-                                },
-                            },
-                            background:'#fee5ea'
-                        }}
-                    />
-                    
-                </Grid>
-            </Grid>
+                    Get Started
+                </Button>
             </Box>
-        </div>
+
+            <Typography
+                variant="body2"
+                sx={{ marginTop: 4, color: '#7f8c8d' }} // Light gray text for footer
+            >
+                © 2024 Autocorrector. All rights reserved.
+            </Typography>
+        </Box>
     );
 }
