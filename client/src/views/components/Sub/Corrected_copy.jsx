@@ -71,7 +71,7 @@ function Corrected_copy({correctedCopy}){
                     sx={{
                         display: 'block', // Makes sure the icon takes a full line
                         textAlign: 'center', // Center the icon if needed
-                        mt: 0, // Add some margin for spacing
+                        mt: 1, // Add some margin for spacing
                     }}
                 >
                     <ReplyIcon
@@ -87,7 +87,7 @@ function Corrected_copy({correctedCopy}){
                 sx={{
                     height: 'auto',
                     fontFamily: 'Poppins',
-                    mt: 5,
+                    mt: 1,
                     mb: 4,
                     py: 5,
                     px: 5,
@@ -115,7 +115,7 @@ function Corrected_copy({correctedCopy}){
                                     color: 'white',
                                     background: item.background,
                                     boxShadow: item.boxShadow,
-                                    m: 1, // Consistent margin around buttons
+                                    m: 0, // Consistent margin around buttons
                                 }}
                             >
                                 {item.label}

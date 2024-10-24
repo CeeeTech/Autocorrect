@@ -91,7 +91,7 @@ function Corrected_writing({ correctedText, finalCopy, feedbackText, positiveTex
                     sx={{
                         height: 'auto',
                         fontFamily: 'Poppins',
-                        mt: 5,
+                        mt: 1,
                         marginBottom: 4,
                         background: 'white',
                         borderRadius: '8px',
@@ -147,7 +147,7 @@ function Corrected_writing({ correctedText, finalCopy, feedbackText, positiveTex
                                     color: 'white',
                                     background: item.background,
                                     boxShadow: item.boxShadow,
-                                    m: 1, // Consistent margin around buttons
+                                    m: 0, // Consistent margin around buttons
                                 }}
                             >
                                 {item.label}
