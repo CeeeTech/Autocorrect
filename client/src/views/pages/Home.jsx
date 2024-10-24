@@ -1,11 +1,12 @@
 import { Button, Box, Grid, TextField, Typography } from '@mui/material';
 
 export default function Home() {
+
     return (
         <div>
             <Box sx={{
                 background:'#FAFAFA '
-            }}>
+            }}>  
             <Grid
                 container
                 justifyContent="center"
