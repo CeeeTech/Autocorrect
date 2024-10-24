@@ -1,16 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 
-function Submit(){
-
-    const handleSubmitAsSPDF = () => {
-        alert('Submitting as Student');
-    };
-
-    const handleSubmitAsTPDF = () => {
-        alert('Submitting as Teacher');
-    };
-
+function Submit({ onSubmitChange }){
     return(
         <div>
             <Box 
@@ -57,7 +48,7 @@ function Submit(){
                             </Typography>
                             <Button
                                 fullWidth //this one
-                                onClick={handleSubmitAsSPDF} 
+                                onClick={() => onSubmitChange('Student')} 
                                 sx={{
                                     height:55,
                                     //width: 360,
@@ -102,7 +93,7 @@ function Submit(){
                             </Typography>
                             <Button
                                 fullWidth //this one
-                                onClick={handleSubmitAsTPDF} 
+                                onClick={() => onSubmitChange('Teacher')} 
                                 sx={{
                                     height:55,
                                     //width: 360,
