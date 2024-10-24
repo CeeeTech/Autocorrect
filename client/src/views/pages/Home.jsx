@@ -5,7 +5,6 @@ export default function LandingPage() {
     return (
         <Box
             sx={{
-                minHeight: '100vh',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -29,10 +28,6 @@ export default function LandingPage() {
                     },
                 }}
             >
-                <Typography variant="h2" gutterBottom sx={{ color: '#2c3e50' }}>
-                    Welcome to Autocorrector
-                </Typography>
-
                 {/* Improved description section */}
                 <Typography
                     variant="body1"

@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './views/pages/Home';
 import NavBar from './views/components/Main/navBar';
-import HomeNew from './views/pages/HomeNew';
+import NewPage from './views/pages/NewPage';
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <div>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/new-page' element={<HomeNew />} />
+          <Route path='/new-page' element={<NewPage />} />
         </Routes>
       </div>
     </BrowserRouter>

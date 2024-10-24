@@ -8,15 +8,15 @@ import Add from '../components/Main/AddLang';
 import Corrections from '../components/Main/Corrections';
 
 const steps = [
-    'Who is Submiting',
-    'English Varient',
+    'Who is Submitting',
+    'English Variant',
     'School Year',
     'Writing Type',
     'Additional Languages',
     'Corrections',
 ];
 
-export default function Home() {
+export default function NewPage() {
     const [activeStep, setActiveStep] = useState(0);
 
     const handleNext = () => {
@@ -51,16 +51,26 @@ export default function Home() {
     };
 
     return (
-        <Box sx={{ background: '#FAFAFA', minHeight: '100vh' }}>
+        <Box sx={{ background: '#FAFAFA', minHeight: '100vh', p: { xs: 2, sm: 3, md: 5 } }}>
             <Typography
                 variant="h4"
                 align="center"
-                sx={{ fontFamily: 'Poppins', fontWeight: 100, mb: 3 }}
+                sx={{ fontFamily: 'Poppins', fontWeight: 100, mb: 3, fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } }}
             >
                 Choose your options for corrections and customized feedback.
             </Typography>
 
-            <Stepper activeStep={activeStep} alternativeLabel>
+            <Stepper 
+                activeStep={activeStep} 
+                alternativeLabel 
+                sx={{ 
+                    width: { xs: '100%', sm: '100%', md: '80%' },
+                    mx: 'auto',
+                    '& .MuiStepLabel-label': {
+                        fontSize: { xs: '0.75rem', sm: '1rem', md: '1.25rem' }, // Adjust label font size for responsiveness
+                    },
+                }}
+            >
                 {steps.map((label, index) => (
                     <Step key={index}>
                         <StepLabel>{label}</StepLabel>
@@ -79,8 +89,16 @@ export default function Home() {
                         </Button>
                     </Box>
                 ) : (
-                    <Grid container direction="column" alignItems="center" spacing={2}>
-                        <Grid item>{renderStepContent(activeStep)}</Grid>
+                    <Grid
+                        container
+                        direction="column"
+                        alignItems="center"
+                        spacing={2}
+                        sx={{ width: { xs: '100%', sm: '90%', md: '70%' }, mx: 'auto' }}
+                    >
+                        <Grid item sx={{ width: '100%' }}>
+                            {renderStepContent(activeStep)}
+                        </Grid>
                         <Grid item>
                             <Button
                                 disabled={activeStep === 0}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography, Grid } from "@mui/material"; // Import Grid from MUI
 import Feedback from './Feedback';
 import Positives from './Positives';
 import Corrected_copy from './Corrected_copy';
@@ -9,11 +9,11 @@ function Corrected_writing({ correctedText, finalCopy, feedbackText, positiveTex
     const [modifiedText, setModifiedText] = useState("");
     const [loading, setLoading] = useState(true);
 
-    const buttonLista = [
-        { label: 'Download PDF', background: '#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
-        { label: 'Download Word File', background: '#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
-        { label: 'Share Word File', background: '#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
-        { label: 'Share PDF', background: '#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+    const buttonList = [
+        { label: 'Download as PDF', background: '#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+        { label: 'Download as Word', background: '#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+        { label: 'Share as Word', background: '#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+        { label: 'Share as PDF', background: '#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
     ];
 
     useEffect(() => {
@@ -131,36 +131,31 @@ function Corrected_writing({ correctedText, finalCopy, feedbackText, positiveTex
                     <Positives positiveText={positiveText} />
                 </Box>
 
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: 3
-                    }}
-                >
-                    {buttonLista.map((item, index) => (
-                        <Button
-                            key={index}
-                            fullWidth
-                            sx={{
-                                flexBasis: { xs: '100%', sm: '45%', md: '18%' },
-                                height: 45,
-                                borderRadius: 3,
-                                border: '2px solid white',
-                                textTransform: 'none',
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                color: 'white',
-                                background: item.background,
-                                boxShadow: item.boxShadow,
-                                margin: 2
-                            }}
-                        >
-                            {item.label}
-                        </Button>
+                {/* Use Grid for button layout */}
+                <Grid container spacing={2} sx={{ justifyContent: 'center', mb: 3 }}>
+                    {buttonList.map((item, index) => (
+                        <Grid item xs={6} sm={3} key={index}> {/* 2 columns on small screens, 4 on larger */}
+                            <Button
+                                fullWidth
+                                sx={{
+                                    height: 45,
+                                    borderRadius: 3,
+                                    border: '2px solid white',
+                                    textTransform: 'none',
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: 'white',
+                                    background: item.background,
+                                    boxShadow: item.boxShadow,
+                                    m: 1, // Consistent margin around buttons
+                                }}
+                            >
+                                {item.label}
+                            </Button>
+                        </Grid>
                     ))}
-                </Box>
+                </Grid>
+
                 <Box>
                     <Typography
                         mb={3}

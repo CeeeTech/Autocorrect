@@ -1,16 +1,16 @@
 import React from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Grid, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReplyIcon from '@mui/icons-material/Reply';
 
 function Corrected_copy({correctedCopy}){
     const [modifiedText, setModifiedText] = useState("");
     
-    const buttonLista = [
-        { label: 'Download PDF', background:'#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a'  },
-        { label: 'Download Word File', background:'#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
-        { label: 'Share Word File', background:'#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
-        { label: 'Share PDF', background:'#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+    const buttonList = [
+        { label: 'Download as PDF', background: '#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+        { label: 'Download as Word', background: '#1c1e9a', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+        { label: 'Share as Word', background: '#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
+        { label: 'Share as PDF', background: '#4f50ed', boxShadow: '1.5px 1.5px 5px 0px #1c1e9a' },
     ];
 
     useEffect(() => {
@@ -100,35 +100,29 @@ function Corrected_copy({correctedCopy}){
                 >   {modifiedText}
                 </Box>
 
-                <Box 
-                    sx={{ 
-                        display: 'flex',
-                        justifyContent:'center',
-                        alignItems: 'center',   
-                        gap:3
-                    }}>
-                        {buttonLista.map((item, index) => (
+                <Grid container spacing={2} sx={{ justifyContent: 'center', mb: 3 }}>
+                    {buttonList.map((item, index) => (
+                        <Grid item xs={6} sm={3} key={index}> {/* 2 columns on small screens, 4 on larger */}
                             <Button
-                                key={index}
                                 fullWidth
                                 sx={{
-                                    flexBasis: { xs: '100%', sm: '45%', md: '18%' },
-                                    height:45,
+                                    height: 45,
                                     borderRadius: 3,
-                                    border:'2px, solid, white',
+                                    border: '2px solid white',
                                     textTransform: 'none',
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
                                     color: 'white',
                                     background: item.background,
                                     boxShadow: item.boxShadow,
-                                    margin:2
+                                    m: 1, // Consistent margin around buttons
                                 }}
                             >
                                 {item.label}
                             </Button>
-                        ))}
-                </Box>
+                        </Grid>
+                    ))}
+                </Grid>
             </Box>   
         </>
     )
