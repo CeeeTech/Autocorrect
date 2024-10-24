@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 
-function English(){
+function English({onEnglishChange}){
 
     const buttonList2 = [
         { label: 'UK English', background:'#4f51ee', color: 'white'  },
@@ -41,6 +41,7 @@ function English(){
 
                 {buttonList2.map((item, index) => (
                     <Button
+                        onClick={() => onEnglishChange(item.label)}
                         key={index}
                         fullWidth 
                         sx={{
