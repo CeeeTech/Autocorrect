@@ -2,7 +2,6 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from './views/pages/Home';
 import NavBar from './views/components/Main/navBar';
 import HomeNew from './views/pages/HomeNew';
-import New from './views/pages/HomeNew copy';
 
 function App() {
   return (
